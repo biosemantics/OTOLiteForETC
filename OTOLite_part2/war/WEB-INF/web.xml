@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+	<servlet>
+		<servlet-name>GeneralServiceIml</servlet-name>
+		<servlet-class>edu.arizona.sirls.server.rpc.GeneralServiceIml</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GeneralServiceIml</servlet-name>
+		<url-pattern>/otolite_part2/general</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>ToOntologiesServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.sirls.server.rpc.ToOntologiesServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>ToOntologiesServiceImpl</servlet-name>
+		<url-pattern>/otolite_part2/toOntologies</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>OrderServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.sirls.server.rpc.OrderServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>OrderServiceImpl</servlet-name>
+		<url-pattern>/otolite_part2/orders</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>OTOLite_part2.html</welcome-file>
+	</welcome-file-list>
+
+</web-app>

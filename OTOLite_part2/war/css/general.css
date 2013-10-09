@@ -1,0 +1,107 @@
+/*only use color a8d04d - light green, 279446 - green, 307137 - dark green*/
+.gwt-TabPanel {
+	
+}
+
+.gwt-TabPanelBottom {
+	
+}
+
+.gwt-TabBar {
+	
+}
+
+.gwt-TabBarItem {
+	cursor: pointer;
+	margin-right: 2px;
+}
+
+.gwt-TabBarItem-selected {
+	font-weight: bold;
+	cursor: default;
+}
+
+.contentPanel {
+	min-height: 500px;
+}
+
+.right_container {
+	position: relative;
+}
+
+.right {
+	position: absolute;
+	right: 20px;
+}
+
+.left_container {
+	position: relative;
+}
+
+.left {
+	
+}
+
+.gwt-DisclosurePanel {
+	
+}
+
+.gwt-DisclosurePanel-open {
+	
+}
+
+.gwt-DisclosurePanel-closed {
+	
+}
+
+.gwt-DisclosurePanel .header,.gwt-DisclosurePanel .header a,.gwt-DisclosurePanel .header td
+	{
+	text-decoration: none; /* Remove underline from header */
+	color: black;
+	cursor: pointer;
+	cursor: hand;
+	font-weight: bold;
+}
+
+.gwt-DisclosurePanel .content {
+	border-left: 3px solid #e7e7e7;
+	padding: 4px 0px 4px 8px;
+	margin-left: 6px;
+}
+
+.img_btn {
+	cursor: pointer;
+}
+
+.clickable {
+	cursor: pointer;
+}
+
+.tbl_field_label {
+	text-align: right;
+	font-weight: bold;
+}
+
+.required {
+	color: red;
+}
+
+.accepted {
+	color: #307137;
+}
+
+.tbl_title {
+	text-align: center;
+	font-size: large;
+	background-color: #307137;
+	font-weight: bold;
+	color: white;
+}
+
+.tbl_btn_row {
+	background-color: #a8d04d;
+}
+
+.btn_in_row_padding {
+	margin-left: 10px;
+}
