@@ -6,6 +6,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.arizona.sirls.client.rpc.OrderService;
 import edu.arizona.sirls.server.db.OrderDAO;
+import edu.arizona.sirls.shared.beans.orders.OrderCategory;
 import edu.arizona.sirls.shared.beans.orders.OrderSet;
 
 public class OrderServiceImpl extends RemoteServiceServlet implements
@@ -20,11 +21,7 @@ public class OrderServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public ArrayList<OrderSet> getOrderSets(String uploadID) throws Exception {
-		ArrayList<OrderSet> orderSets = new ArrayList<OrderSet>();
-
-		OrderDAO orderDAO = OrderDAO.getInstance();
-		orderSets = orderDAO.getOrderSets(Integer.parseInt(uploadID));
-		return orderSets;
+		return OrderDAO.getInstance().getOrderSets(Integer.parseInt(uploadID));
 	}
 
 	/**
@@ -34,8 +31,20 @@ public class OrderServiceImpl extends RemoteServiceServlet implements
 	 */
 	@Override
 	public void saveOrderSet(OrderSet orderSet) throws Exception {
-		OrderDAO orderDAO = OrderDAO.getInstance();
-		orderDAO.saveOrderSet(orderSet);
+		OrderDAO.getInstance().saveOrderSet(orderSet);
+	}
+
+	@Override
+	public ArrayList<OrderCategory> getOrderCategories(String uploadID)
+			throws Exception {
+		return OrderDAO.getInstance().getOrderCategories(
+				Integer.parseInt(uploadID));
+	}
+
+	@Override
+	public OrderSet getOrderSetByID(String categoryID) throws Exception {
+		return OrderDAO.getInstance().getOrderSetByID(
+				Integer.parseInt(categoryID));
 	}
 
 }

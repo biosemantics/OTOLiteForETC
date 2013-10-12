@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import edu.arizona.sirls.shared.beans.orders.Order;
+import edu.arizona.sirls.shared.beans.orders.OrderCategory;
 import edu.arizona.sirls.shared.beans.orders.OrderSet;
 import edu.arizona.sirls.shared.beans.orders.TermInOrder;
 
@@ -97,6 +98,32 @@ public class OrderDAO extends AbstractDAO {
 		}
 	}
 
+	public ArrayList<OrderCategory> getOrderCategories(int uploadID)
+			throws SQLException {
+		ArrayList<OrderCategory> categories = new ArrayList<OrderCategory>();
+		ResultSet rset = null;
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			String sql = "select categoryID, categoryName from order_categories "
+					+ "where uploadID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uploadID);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				categories.add(new OrderCategory(rset.getString("categoryID"),
+						rset.getString("categoryName")));
+			}
+		} finally {
+			closeConnection(conn);
+			close(rset);
+			close(pstmt);
+		}
+
+		return categories;
+	}
+
 	/**
 	 * get all order sets from db
 	 * 
@@ -179,5 +206,67 @@ public class OrderDAO extends AbstractDAO {
 		}
 
 		return orderSets;
+	}
+
+	public OrderSet getOrderSetByID(int categoryID) throws SQLException {
+		OrderSet orderSet = null;
+		ResultSet rset = null, rset2 = null;
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		try {
+			conn = getConnection();
+			orderSet = new OrderSet();
+			orderSet.setCategoryID(Integer.toString(categoryID));
+
+			// get base terms in this category
+			ArrayList<String> baseTerms = new ArrayList<String>();
+			String sql = "select termName from terms_in_order_category where categoryID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, categoryID);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				baseTerms.add(rset.getString("termName"));
+			}
+			orderSet.setTerms(baseTerms);
+
+			// get orders in this category
+			ArrayList<Order> orders = new ArrayList<Order>();
+			sql = "select orderID, orderName, orderDescription from orders_in_order_category "
+					+ "where categoryID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, categoryID);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				// prepare order
+				int orderID = rset.getInt("orderID");
+				Order order = new Order(Integer.toString(orderID),
+						rset.getString("orderName"),
+						rset.getString("orderDescription"));
+
+				sql = "select termName, position from term_position_in_order "
+						+ "where orderID = ? order by position, termName";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, orderID);
+				rset2 = pstmt.executeQuery();
+				ArrayList<TermInOrder> termsInOrder = new ArrayList<TermInOrder>();
+				while (rset2.next()) {
+					termsInOrder.add(new TermInOrder(rset2
+							.getString("termName"), rset2.getInt("position")));
+				}
+				order.setTermsInOrder(termsInOrder);
+
+				// add order into order list
+				orders.add(order);
+			}
+			orderSet.setOrders(orders);
+		} finally {
+			// close everything with or without exception
+			closeConnection(conn);
+			close(rset);
+			close(rset2);
+			close(pstmt);
+		}
+
+		return orderSet;
 	}
 }

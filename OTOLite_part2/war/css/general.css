@@ -47,11 +47,13 @@
 }
 
 .gwt-DisclosurePanel-open {
-	
+	padding-left: 3px;
+	padding-top: 3px;
 }
 
 .gwt-DisclosurePanel-closed {
-	
+	padding-left: 3px;
+	padding-top: 3px;
 }
 
 .gwt-DisclosurePanel .header,.gwt-DisclosurePanel .header a,.gwt-DisclosurePanel .header td
@@ -61,10 +63,11 @@
 	cursor: pointer;
 	cursor: hand;
 	font-weight: bold;
+	background-color: #D6F8CD;
 }
 
 .gwt-DisclosurePanel .content {
-	border-left: 3px solid #e7e7e7;
+	border-left: 3px solid #D6F8CD;
 	padding: 4px 0px 4px 8px;
 	margin-left: 6px;
 }
@@ -104,4 +107,8 @@
 
 .btn_in_row_padding {
 	margin-left: 10px;
+}
+
+.to_save {
+	color: red;
 }

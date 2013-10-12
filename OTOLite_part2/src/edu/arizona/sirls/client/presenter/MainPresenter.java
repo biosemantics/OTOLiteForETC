@@ -10,9 +10,11 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.presenter.orders.OrdersPagePresenter;
 import edu.arizona.sirls.client.presenter.to_ontologies.ToOntologyPresenter;
 import edu.arizona.sirls.client.rpc.GeneralService;
 import edu.arizona.sirls.client.rpc.GeneralServiceAsync;
+import edu.arizona.sirls.client.view.orders.OrdersPageView;
 import edu.arizona.sirls.client.view.to_ontologies.ToOntologyView;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 
@@ -55,10 +57,11 @@ public class MainPresenter implements Presenter {
 											.getToOntologiesContentContainer());
 							break;
 						case 1:
-							// hierarchy page
+							Window.alert("TODO: hierarchy page");
 							break;
 						case 2:
-							// order page
+							new OrdersPagePresenter(new OrdersPageView())
+									.go(display.getOrderContentContainer());
 							break;
 						default:
 							break;

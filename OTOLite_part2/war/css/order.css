@@ -1,0 +1,50 @@
+/*the 1st column of content table*/
+.ORDERS_table_label {
+	text-align: right;
+}
+
+/*the 2nd column of content table*/
+.ORDERS_table_order {
+	
+}
+
+/*the 1st row of content table*/
+.ORDERS_base_row {
+	background-color: #D6F8CD;
+}
+
+.ORDERS_base_tbl td {
+	border: 1px solid green;
+	padding: 5px;
+}
+
+.ORDERS_droppable_container {
+	width: 100%;
+	height: 100%;
+}
+
+.ORDERS_order_box_cell {
+	width: 50px;
+	height: 20px;
+	border: 1px solid green;
+}
+
+.ORDERS_order_name_label {
+	cursor: pointer;
+}
+
+.ORDERS_order_name_cell {
+	text-align: right;
+}
+
+.ORDERS_orderset_tbl {
+	border: 1px solid gray;
+}
+
+.ORDERS_in_order {
+	background-color: gray;
+}
+
+.ORDERS_selected_term {
+	font-weight: bold;
+}
