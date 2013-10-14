@@ -140,6 +140,7 @@ public class TermsToOntologiesClient {
 				.getFullIdOrIdOrLabel();
 		for (Object object : fullIdOrIdOrLabel) {
 			if (object instanceof JAXBElement) {
+				@SuppressWarnings("unchecked")
 				JAXBElement<String> possibleIdElement = (JAXBElement<String>) object;
 				if (possibleIdElement.getName().toString().equals(idName)) {
 					return possibleIdElement.getValue();

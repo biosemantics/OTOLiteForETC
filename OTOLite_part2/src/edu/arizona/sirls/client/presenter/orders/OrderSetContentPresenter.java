@@ -171,12 +171,15 @@ public class OrderSetContentPresenter implements Presenter {
 								addTermToOrder(termName, event.getWidget());
 							}
 						} else {
+
 							// check if src and target are in the same order
 							DroppableContainerView srcBox = (DroppableContainerView) termDragged
 									.getParent().getParent();
 							DroppableContainerView targetBox = event
 									.getWidget();
 							if (srcBox.equals(targetBox)) {
+								// if the same box: hit a valid droppable box
+								setHitValidDroppableBox(true);
 								return;
 							}
 

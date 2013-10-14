@@ -6,7 +6,6 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 import edu.arizona.sirls.client.presenter.Presenter;
 import edu.arizona.sirls.client.view.orders.DroppableContainerView;

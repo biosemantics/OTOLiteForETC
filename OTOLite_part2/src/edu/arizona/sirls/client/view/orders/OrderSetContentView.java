@@ -3,7 +3,6 @@ package edu.arizona.sirls.client.view.orders;
 import java.util.ArrayList;
 
 import com.google.gwt.query.client.GQuery;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
