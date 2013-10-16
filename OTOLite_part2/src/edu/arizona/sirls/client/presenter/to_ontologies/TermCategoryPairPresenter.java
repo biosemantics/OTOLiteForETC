@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.event.context.ViewTermInfoEvent;
 import edu.arizona.sirls.client.event.to_ontologies.MoveTermCategoryPairEvent;
 import edu.arizona.sirls.client.event.to_ontologies.TermCategoryPairSelectedEvent;
 import edu.arizona.sirls.client.presenter.Presenter;
@@ -29,15 +30,18 @@ public class TermCategoryPairPresenter implements Presenter {
 
 	private final Display display;
 	private final HandlerManager eventBus;
+	private final HandlerManager globalEventBus;
 
 	/**
 	 * constructer
 	 * 
 	 * @param view
 	 */
-	public TermCategoryPairPresenter(Display view, HandlerManager eventBus) {
+	public TermCategoryPairPresenter(Display view, HandlerManager eventBus,
+			HandlerManager globalEventBus) {
 		this.display = view;
 		this.eventBus = eventBus;
+		this.globalEventBus = globalEventBus;
 	}
 
 	@Override
@@ -59,6 +63,9 @@ public class TermCategoryPairPresenter implements Presenter {
 
 				eventBus.fireEvent(new TermCategoryPairSelectedEvent(display
 						.getTermCategoryPair(), display.getNameLabel()));
+
+				globalEventBus.fireEvent(new ViewTermInfoEvent(display
+						.getTermCategoryPair().getTerm()));
 			}
 		});
 

@@ -39,11 +39,14 @@ public class OrderTblPresenter implements Presenter {
 	}
 
 	private final Display display;
-	private HandlerManager eventBus;
+	private final HandlerManager eventBus;
+	private final HandlerManager globalEventBus;
 
-	public OrderTblPresenter(Display display, HandlerManager eventBus) {
+	public OrderTblPresenter(Display display, HandlerManager eventBus,
+			HandlerManager globalEventBus) {
 		this.display = display;
 		this.eventBus = eventBus;
+		this.globalEventBus = globalEventBus;
 		bindEvents();
 		addBoxesWithData();
 	}
@@ -80,8 +83,8 @@ public class OrderTblPresenter implements Presenter {
 			// create the box and fill in the table
 			DroppableContainerView box = new DroppableContainerView(boxIndex,
 					termsInBox, (OrderTblView) display);
-			new DroppableContainerPresenter(box, eventBus).goWithFlexTable(
-					display.getOrderTbl(), 0, boxIndex);
+			new DroppableContainerPresenter(box, eventBus, globalEventBus)
+					.goWithFlexTable(display.getOrderTbl(), 0, boxIndex);
 			display.addBoxToList(box);
 		}
 	}

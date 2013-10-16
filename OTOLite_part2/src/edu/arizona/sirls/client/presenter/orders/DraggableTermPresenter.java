@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.event.context.ViewTermInfoEvent;
 import edu.arizona.sirls.client.event.orders.ClickTermEvent;
 import edu.arizona.sirls.client.event.orders.DragTermEndEvent;
 import edu.arizona.sirls.client.event.orders.DragTermStartEvent;
@@ -36,10 +37,13 @@ public class DraggableTermPresenter implements Presenter {
 
 	private final Display display;
 	private HandlerManager eventBus;
+	private final HandlerManager globalEventBus;
 
-	public DraggableTermPresenter(Display display, HandlerManager eventBus) {
+	public DraggableTermPresenter(Display display, HandlerManager eventBus,
+			HandlerManager globalEventBus) {
 		this.display = display;
 		this.eventBus = eventBus;
+		this.globalEventBus = globalEventBus;
 		bindEvents();
 	}
 
@@ -81,6 +85,8 @@ public class DraggableTermPresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				eventBus.fireEvent(new ClickTermEvent(display.getTermName()));
+				globalEventBus.fireEvent(new ViewTermInfoEvent(display
+						.getTermName()));
 			}
 		});
 

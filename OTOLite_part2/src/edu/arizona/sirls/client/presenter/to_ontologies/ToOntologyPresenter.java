@@ -94,9 +94,11 @@ public class ToOntologyPresenter implements Presenter {
 	private String selectedTerm;
 	private String selectedCategory;
 	private Widget selectedPairLabel;
+	private final HandlerManager globalEventBus;
 
-	public ToOntologyPresenter(Display view) {
+	public ToOntologyPresenter(Display view, HandlerManager globalEventBus) {
 		this.display = view;
+		this.globalEventBus = globalEventBus;
 	}
 
 	@Override
@@ -388,7 +390,7 @@ public class ToOntologyPresenter implements Presenter {
 						} else {
 							updateTermCategoryPairStatus(MappingStatus.MAPPED_TO_SUBMISSION);
 						}
-						Window.alert("Selection has been saved!");
+						// Window.alert("Selection has been saved!");
 					}
 
 					@Override
@@ -466,8 +468,9 @@ public class ToOntologyPresenter implements Presenter {
 
 						TermCategoryPairView item = new TermCategoryPairView(
 								new_data);
-						new TermCategoryPairPresenter(item, eventBus)
-								.go(display.getListPanelByType(related_type));
+						new TermCategoryPairPresenter(item, eventBus,
+								globalEventBus).go(display
+								.getListPanelByType(related_type));
 						display.updateTermCategoryPairsCount(related_type,
 								display.getListCountByType(related_type) + 1);
 					}
@@ -521,7 +524,8 @@ public class ToOntologyPresenter implements Presenter {
 				list.size());
 		for (TermCategoryPair structure : list) {
 			new TermCategoryPairPresenter(new TermCategoryPairView(structure),
-					eventBus).go(display.getRegularStructureList());
+					eventBus, globalEventBus).go(display
+					.getRegularStructureList());
 		}
 
 		// character
@@ -530,7 +534,8 @@ public class ToOntologyPresenter implements Presenter {
 				list.size());
 		for (TermCategoryPair character : list) {
 			new TermCategoryPairPresenter(new TermCategoryPairView(character),
-					eventBus).go(display.getRegularCharacterList());
+					eventBus, globalEventBus).go(display
+					.getRegularCharacterList());
 		}
 
 		// removed structure
@@ -539,7 +544,8 @@ public class ToOntologyPresenter implements Presenter {
 				list.size());
 		for (TermCategoryPair structure : list) {
 			new TermCategoryPairPresenter(new TermCategoryPairView(structure),
-					eventBus).go(display.getRemovedStructureList());
+					eventBus, globalEventBus).go(display
+					.getRemovedStructureList());
 		}
 
 		// removed character
@@ -548,7 +554,8 @@ public class ToOntologyPresenter implements Presenter {
 				list.size());
 		for (TermCategoryPair character : list) {
 			new TermCategoryPairPresenter(new TermCategoryPairView(character),
-					eventBus).go(display.getRemovedCharacterList());
+					eventBus, globalEventBus).go(display
+					.getRemovedCharacterList());
 		}
 	}
 }

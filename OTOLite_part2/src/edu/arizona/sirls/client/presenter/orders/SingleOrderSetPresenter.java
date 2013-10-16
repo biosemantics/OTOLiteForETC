@@ -2,6 +2,7 @@ package edu.arizona.sirls.client.presenter.orders;
 
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Event;
@@ -36,10 +37,13 @@ public class SingleOrderSetPresenter implements Presenter {
 	private final Display display;
 	private OrderServiceAsync rpcService;
 	HandlerRegistration preventClose = null;
+	private final HandlerManager globalEventBus;
 
-	public SingleOrderSetPresenter(Display display, OrderServiceAsync rpcService) {
+	public SingleOrderSetPresenter(Display display,
+			OrderServiceAsync rpcService, HandlerManager globalEventBus) {
 		this.display = display;
 		this.rpcService = rpcService;
+		this.globalEventBus = globalEventBus;
 	}
 
 	@Override
@@ -68,7 +72,8 @@ public class SingleOrderSetPresenter implements Presenter {
 			@Override
 			public void onSuccess(OrderSet result) {
 				new OrderSetContentPresenter(new OrderSetContentView(result),
-						rpcService).go(display.getContentPanel());
+						rpcService, globalEventBus).go(display
+						.getContentPanel());
 			}
 
 			@Override

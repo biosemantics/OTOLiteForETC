@@ -3,6 +3,7 @@ package edu.arizona.sirls.client.presenter;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -35,12 +36,15 @@ public class MainPresenter implements Presenter {
 	}
 
 	private final Display display;
+	private HandlerManager globalEventBus;
 	public static String uploadID;
 	public static UploadInfo uploadInfo;
 	private GeneralServiceAsync rpcService = GWT.create(GeneralService.class);
 
-	public MainPresenter(Display view) throws Exception {
+	public MainPresenter(Display view, HandlerManager globalEventBus)
+			throws Exception {
 		this.display = view;
+		this.globalEventBus = globalEventBus;
 		uploadID = Validator.validateUploadID();
 	}
 
@@ -52,16 +56,17 @@ public class MainPresenter implements Presenter {
 					public void onSelection(SelectionEvent<Integer> event) {
 						switch (event.getSelectedItem()) {
 						case 0:
-							new ToOntologyPresenter(new ToOntologyView())
-									.go(display
-											.getToOntologiesContentContainer());
+							new ToOntologyPresenter(new ToOntologyView(),
+									globalEventBus).go(display
+									.getToOntologiesContentContainer());
 							break;
 						case 1:
-							Window.alert("TODO: hierarchy page");
+							// Window.alert("TODO: hierarchy page");
 							break;
 						case 2:
-							new OrdersPagePresenter(new OrdersPageView())
-									.go(display.getOrderContentContainer());
+							new OrdersPagePresenter(new OrdersPageView(),
+									globalEventBus).go(display
+									.getOrderContentContainer());
 							break;
 						default:
 							break;

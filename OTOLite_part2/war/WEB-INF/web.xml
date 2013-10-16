@@ -14,6 +14,17 @@
 		<url-pattern>/otolite_part2/general</url-pattern>
 	</servlet-mapping>
 
+
+	<servlet>
+		<servlet-name>TermInfoServiceIml</servlet-name>
+		<servlet-class>edu.arizona.sirls.server.rpc.TermInfoServiceIml</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TermInfoServiceIml</servlet-name>
+		<url-pattern>/otolite_part2/termInfo</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>ToOntologiesServiceImpl</servlet-name>
 		<servlet-class>edu.arizona.sirls.server.rpc.ToOntologiesServiceImpl</servlet-class>

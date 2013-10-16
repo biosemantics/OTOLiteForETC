@@ -3,6 +3,7 @@ package edu.arizona.sirls.client.presenter.orders;
 import java.util.ArrayList;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -26,9 +27,11 @@ public class OrdersPagePresenter implements Presenter {
 
 	private final Display display;
 	private OrderServiceAsync rpcService = GWT.create(OrderService.class);
+	private final HandlerManager globalEventBus;
 
-	public OrdersPagePresenter(Display display) {
+	public OrdersPagePresenter(Display display, HandlerManager globalEventBus) {
 		this.display = display;
+		this.globalEventBus = globalEventBus;
 
 	}
 
@@ -53,8 +56,8 @@ public class OrdersPagePresenter implements Presenter {
 					public void onSuccess(ArrayList<OrderCategory> result) {
 						for (OrderCategory category : result) {
 							new SingleOrderSetPresenter(new SingleOrderSetView(
-									category), rpcService).go(display
-									.getPanel());
+									category), rpcService, globalEventBus)
+									.go(display.getPanel());
 						}
 					}
 

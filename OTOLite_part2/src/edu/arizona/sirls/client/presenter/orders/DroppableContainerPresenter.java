@@ -41,10 +41,13 @@ public class DroppableContainerPresenter implements Presenter {
 
 	private final Display display;
 	private HandlerManager eventBus;
+	private final HandlerManager globalEventBus;
 
-	public DroppableContainerPresenter(Display display, HandlerManager eventBus) {
+	public DroppableContainerPresenter(Display display,
+			HandlerManager eventBus, HandlerManager globalEventBus) {
 		this.display = display;
 		this.eventBus = eventBus;
+		this.globalEventBus = globalEventBus;
 		bindEvents();
 		addTermsToBox();
 	}
@@ -52,8 +55,8 @@ public class DroppableContainerPresenter implements Presenter {
 	private void addTermsToBox() {
 		for (String term : display.getTermsInBox()) {
 			new DraggableTermPresenter(new DraggableTermView(term, false,
-					display.getParentOrder()), eventBus).go(display
-					.getContainer());
+					display.getParentOrder()), eventBus, globalEventBus)
+					.go(display.getContainer());
 			display.getParentOrder().addTerm(term);
 		}
 	}

@@ -65,6 +65,8 @@ public class OrderSetContentPresenter implements Presenter {
 	// each order set has its own event bus
 	private HandlerManager eventBus = new HandlerManager(null);
 
+	private final HandlerManager globalEvenBus;
+
 	// fields to support function
 	private DraggableTermView termDragged;
 	private boolean hitValidDroppableBox;
@@ -77,9 +79,10 @@ public class OrderSetContentPresenter implements Presenter {
 	private ArrayList<OrderTblView> orderTblList = new ArrayList<OrderTblView>();
 
 	public OrderSetContentPresenter(Display display,
-			OrderServiceAsync rpcService) {
+			OrderServiceAsync rpcService, HandlerManager globalEventBus) {
 		this.display = display;
 		this.rpcService = rpcService;
+		this.globalEvenBus = globalEventBus;
 	}
 
 	@Override
@@ -228,9 +231,10 @@ public class OrderSetContentPresenter implements Presenter {
 					DraggableTermView newTermView = new DraggableTermView(
 							termName, true, null);
 					newTermView.getTermLabel().addStyleName(Styles.TO_SAVE);
-					new DraggableTermPresenter(newTermView, eventBus)
-							.goWithFlexTable(display.getBaseTermList(), 0,
-									display.getNumOfTerms());
+					new DraggableTermPresenter(newTermView, eventBus,
+							globalEvenBus).goWithFlexTable(
+							display.getBaseTermList(), 0,
+							display.getNumOfTerms());
 
 					// for each order, add an empty box
 					for (OrderTblView orderTbl : orderTblList) {
@@ -238,9 +242,10 @@ public class OrderSetContentPresenter implements Presenter {
 								display.getNumOfTerms(),
 								new ArrayList<String>(), orderTbl);
 
-						new DroppableContainerPresenter(newBox, eventBus)
-								.goWithFlexTable(orderTbl.getOrderTbl(), 0,
-										display.getNumOfTerms());
+						new DroppableContainerPresenter(newBox, eventBus,
+								globalEvenBus).goWithFlexTable(
+								orderTbl.getOrderTbl(), 0,
+								display.getNumOfTerms());
 						orderTbl.addBoxToList(newBox);
 					}
 
@@ -324,8 +329,8 @@ public class OrderSetContentPresenter implements Presenter {
 		int collumn = 0;
 		for (String term : terms) {
 			new DraggableTermPresenter(new DraggableTermView(term, true, null),
-					eventBus).goWithFlexTable(display.getBaseTermList(), 0,
-					collumn);
+					eventBus, globalEvenBus).goWithFlexTable(
+					display.getBaseTermList(), 0, collumn);
 			collumn++;
 		}
 	}
@@ -345,8 +350,8 @@ public class OrderSetContentPresenter implements Presenter {
 				display.getLayoutTbl(), row, 0);
 
 		// terms list in this order
-		new OrderTblPresenter(orderContent, eventBus).goWithFlexTable(
-				display.getLayoutTbl(), row, 1);
+		new OrderTblPresenter(orderContent, eventBus, globalEvenBus)
+				.goWithFlexTable(display.getLayoutTbl(), row, 1);
 	}
 
 	private void fillInOrders(ArrayList<Order> orders) {
@@ -467,8 +472,8 @@ public class OrderSetContentPresenter implements Presenter {
 
 		// create term and add it to target
 		new DraggableTermPresenter(new DraggableTermView(termName, false,
-				targetBox.getParentOrder()), eventBus).go(targetBox
-				.getContainer());
+				targetBox.getParentOrder()), eventBus, globalEvenBus)
+				.go(targetBox.getContainer());
 
 		// update termslist
 		targetBox.addTermToBox(termName);
@@ -486,8 +491,8 @@ public class OrderSetContentPresenter implements Presenter {
 
 		// create draggable term and add it to target
 		new DraggableTermPresenter(new DraggableTermView(termName, false,
-				targetBox.getParentOrder()), eventBus).go(targetBox
-				.getContainer());
+				targetBox.getParentOrder()), eventBus, globalEvenBus)
+				.go(targetBox.getContainer());
 		// update terms of target
 		targetBox.addTermToBox(termName);
 
