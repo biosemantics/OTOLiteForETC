@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import edu.arizona.sirls.shared.beans.context.TermContext;
-import edu.arizona.sirls.shared.beans.context.TermDictionary;
-import edu.arizona.sirls.shared.beans.context.TermGlossary;
+import edu.arizona.sirls.shared.beans.term_info.TermContext;
+import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 
 public interface TermInfoServiceAsync {
 

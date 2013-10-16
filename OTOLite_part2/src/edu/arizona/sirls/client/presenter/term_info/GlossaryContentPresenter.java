@@ -1,4 +1,4 @@
-package edu.arizona.sirls.client.presenter.context;
+package edu.arizona.sirls.client.presenter.term_info;
 
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;

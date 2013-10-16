@@ -1,4 +1,4 @@
-package edu.arizona.sirls.client.presenter.context;
+package edu.arizona.sirls.client.presenter.term_info;
 
 import java.util.ArrayList;
 
@@ -19,12 +19,12 @@ import edu.arizona.sirls.client.presenter.MainPresenter;
 import edu.arizona.sirls.client.presenter.Presenter;
 import edu.arizona.sirls.client.rpc.TermInfoService;
 import edu.arizona.sirls.client.rpc.TermInfoServiceAsync;
-import edu.arizona.sirls.client.view.context.ContextContentView;
-import edu.arizona.sirls.client.view.context.DefinitionContentView;
-import edu.arizona.sirls.client.view.context.GlossaryContentView;
-import edu.arizona.sirls.shared.beans.context.TermContext;
-import edu.arizona.sirls.shared.beans.context.TermDictionary;
-import edu.arizona.sirls.shared.beans.context.TermGlossary;
+import edu.arizona.sirls.client.view.term_info.ContextContentView;
+import edu.arizona.sirls.client.view.term_info.DictionaryContentView;
+import edu.arizona.sirls.client.view.term_info.GlossaryContentView;
+import edu.arizona.sirls.shared.beans.term_info.TermContext;
+import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 
 public class ContextPresenter implements Presenter {
 
@@ -161,7 +161,7 @@ public class ContextPresenter implements Presenter {
 
 			@Override
 			public void onSuccess(TermDictionary result) {
-				new DefinitionContentPresenter(new DefinitionContentView())
+				new DictionaryContentPresenter(new DictionaryContentView())
 						.go(display.getCurrentTabContent());
 
 			}

@@ -6,9 +6,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import edu.arizona.sirls.client.presenter.MainPresenter;
-import edu.arizona.sirls.client.presenter.context.ContextPresenter;
+import edu.arizona.sirls.client.presenter.term_info.ContextPresenter;
 import edu.arizona.sirls.client.view.MainView;
-import edu.arizona.sirls.client.view.context.ContextView;
+import edu.arizona.sirls.client.view.term_info.ContextView;
 
 public class OTOLite_part2 implements EntryPoint {
 	/**

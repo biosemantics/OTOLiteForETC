@@ -6,9 +6,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.arizona.sirls.client.rpc.TermInfoService;
 import edu.arizona.sirls.server.db.ContextDAO;
-import edu.arizona.sirls.shared.beans.context.TermContext;
-import edu.arizona.sirls.shared.beans.context.TermDictionary;
-import edu.arizona.sirls.shared.beans.context.TermGlossary;
+import edu.arizona.sirls.shared.beans.term_info.TermContext;
+import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 
 public class TermInfoServiceIml extends RemoteServiceServlet implements
 		TermInfoService {

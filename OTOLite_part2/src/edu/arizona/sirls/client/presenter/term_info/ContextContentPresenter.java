@@ -1,23 +1,18 @@
-package edu.arizona.sirls.client.presenter.context;
+package edu.arizona.sirls.client.presenter.term_info;
 
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.arizona.sirls.client.presenter.Presenter;
-import edu.arizona.sirls.shared.beans.context.TermDictionary;
 
-public class DefinitionContentPresenter implements Presenter {
-
+public class ContextContentPresenter implements Presenter {
 	public static interface Display {
-		CellTable<TermDictionary> getTbl();
-
 		Widget asWidget();
 	}
 
 	private final Display display;
 
-	public DefinitionContentPresenter(Display display) {
+	public ContextContentPresenter(Display display) {
 		this.display = display;
 	}
 
@@ -33,4 +28,5 @@ public class DefinitionContentPresenter implements Presenter {
 		// TODO Auto-generated method stub
 
 	}
+
 }

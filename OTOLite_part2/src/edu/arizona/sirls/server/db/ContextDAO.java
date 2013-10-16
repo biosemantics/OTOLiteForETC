@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import edu.arizona.sirls.shared.beans.context.TermContext;
+import edu.arizona.sirls.shared.beans.term_info.TermContext;
 
 public class ContextDAO extends AbstractDAO {
 

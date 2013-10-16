@@ -1,4 +1,4 @@
-package edu.arizona.sirls.client.view.context;
+package edu.arizona.sirls.client.view.term_info;
 
 import java.util.ArrayList;
 
@@ -8,8 +8,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.arizona.sirls.client.presenter.context.GlossaryContentPresenter;
-import edu.arizona.sirls.shared.beans.context.TermGlossary;
+import edu.arizona.sirls.client.presenter.term_info.GlossaryContentPresenter;
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 
 public class GlossaryContentView extends Composite implements
 		GlossaryContentPresenter.Display {

@@ -1,11 +1,11 @@
-package edu.arizona.sirls.client.view.context;
+package edu.arizona.sirls.client.view.term_info;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.arizona.sirls.client.presenter.context.ContextPresenter;
+import edu.arizona.sirls.client.presenter.term_info.ContextPresenter;
 
 public class ContextView extends Composite implements ContextPresenter.Display {
 	private TabPanel tabPanel;

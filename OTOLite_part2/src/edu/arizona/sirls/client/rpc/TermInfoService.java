@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
-import edu.arizona.sirls.shared.beans.context.TermContext;
-import edu.arizona.sirls.shared.beans.context.TermDictionary;
-import edu.arizona.sirls.shared.beans.context.TermGlossary;
+import edu.arizona.sirls.shared.beans.term_info.TermContext;
+import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 
 @RemoteServiceRelativePath("termInfo")
 public interface TermInfoService extends RemoteService {

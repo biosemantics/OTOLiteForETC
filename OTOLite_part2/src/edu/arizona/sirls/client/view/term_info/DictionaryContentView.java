@@ -1,17 +1,17 @@
-package edu.arizona.sirls.client.view.context;
+package edu.arizona.sirls.client.view.term_info;
 
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Composite;
 
-import edu.arizona.sirls.client.presenter.context.DefinitionContentPresenter;
-import edu.arizona.sirls.shared.beans.context.TermDictionary;
+import edu.arizona.sirls.client.presenter.term_info.DictionaryContentPresenter;
+import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
 
-public class DefinitionContentView extends Composite implements
-		DefinitionContentPresenter.Display {
+public class DictionaryContentView extends Composite implements
+		DictionaryContentPresenter.Display {
 
 	private CellTable<TermDictionary> table;
 
-	public DefinitionContentView() {
+	public DictionaryContentView() {
 		table = new CellTable<TermDictionary>();
 		table.setSize("100%", "100%");
 		initWidget(table);

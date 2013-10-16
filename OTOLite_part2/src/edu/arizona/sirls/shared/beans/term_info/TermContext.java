@@ -1,4 +1,4 @@
-package edu.arizona.sirls.shared.beans.context;
+package edu.arizona.sirls.shared.beans.term_info;
 
 import java.io.Serializable;
 
