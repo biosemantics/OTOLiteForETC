@@ -9,6 +9,7 @@ import edu.arizona.sirls.client.view.to_ontologies.OperationType;
 import edu.arizona.sirls.server.bioportal.TermsToOntologiesClient;
 import edu.arizona.sirls.server.db.GeneralDAO;
 import edu.arizona.sirls.server.db.ToOntologiesDAO;
+import edu.arizona.sirls.server.oto.QueryOTO;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyMatch;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyRecord;
@@ -82,11 +83,24 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 			String uploadID, OperationType type) throws Exception {
 		UploadInfo info = GeneralDAO.getInstance().getUploadInfo(
 				Integer.parseInt(uploadID));
+
+		// set submitted by
+		submission.setSubmittedBy(info.getEtcUserName());
+
 		TermsToOntologiesClient sendToOntologyClient = new TermsToOntologiesClient(
 				info.getBioportalUserID(), info.getBioportalApiKey());
 		if (type.equals(OperationType.NEW_SUBMISSION)) {
+			// get uuid first
+			submission.setLocalID(QueryOTO.getInstance().getUUID(
+					submission.getTerm(), submission.getCategory(),
+					GeneralDAO.getGlossaryNameByID(info.getGlossaryType()),
+					submission.getDefinition()));
+
+			// submit to bioportal
 			String tmpID = sendToOntologyClient.submitTerm(submission);
 			submission.setTmpID(tmpID);
+
+			// insert record to database
 			ToOntologiesDAO.getInstance().addSubmission(submission,
 					Integer.parseInt(uploadID));
 		} else {
@@ -107,6 +121,12 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 			throws Exception {
 		ToOntologiesDAO.getInstance().clearSelection(
 				Integer.parseInt(glossaryType), term, category);
+
+	}
+
+	@Override
+	public void refreshOntologyStatus(String uploadID) throws Exception {
+		// TODO Auto-generated method stub
 
 	}
 

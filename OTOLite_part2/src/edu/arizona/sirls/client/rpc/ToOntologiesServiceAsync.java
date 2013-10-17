@@ -43,4 +43,6 @@ public interface ToOntologiesServiceAsync {
 	void clearSelection(String glossaryType, String term, String category,
 			AsyncCallback<Void> callback);
 
+	void refreshOntologyStatus(String uploadID, AsyncCallback<Void> callback);
+
 }

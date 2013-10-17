@@ -1,4 +1,13 @@
-#Database
+#Database configuration
 databaseName=
 databaseUser=
 databasePassword=
+
+#bioportal configuration
+bioportalUrl=http://rest.bioontology.org/bioportal/
+
+#OTO configuration
+OTO_url=http://biosemantics.arizona.edu/OTO/
+
+#ontology lookup configuration
+local_ontology_dir=

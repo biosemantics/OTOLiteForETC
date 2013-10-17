@@ -16,8 +16,10 @@ public class OTOLite_part2 implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		try {
+			// create global event bus
 			HandlerManager globalEventBus = new HandlerManager(null);
 
+			// build page
 			new MainPresenter(new MainView(), globalEventBus).go(RootPanel
 					.get("MAIN_CONTENT"));
 			new ContextPresenter(new ContextView(), globalEventBus)

@@ -14,6 +14,13 @@ import edu.arizona.sirls.shared.beans.to_ontologies.TermCategoryLists;
 
 @RemoteServiceRelativePath("toOntologies")
 public interface ToOntologiesService extends RemoteService {
+	/**
+	 * get the 4 lists for this page
+	 * 
+	 * @param uploadID
+	 * @return
+	 * @throws Exception
+	 */
 	TermCategoryLists getTermCategoryLists(String uploadID) throws Exception;
 
 	/**
@@ -69,4 +76,11 @@ public interface ToOntologiesService extends RemoteService {
 
 	OntologySubmission getDefaultDataForNewSubmission(String uploadID,
 			String term, String category) throws Exception;
+
+	/**
+	 * refresh term matches and all submission status
+	 * 
+	 * @throws Exception
+	 */
+	void refreshOntologyStatus(String uploadID) throws Exception;
 }
