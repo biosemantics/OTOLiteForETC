@@ -9,7 +9,6 @@ public class OntologyMatch implements Serializable {
 	private static final long serialVersionUID = -2646362199278635153L;
 	private String matchID;
 	private String term;
-	private String category;
 	private String ontologyID;
 	private String permanentID;
 	private String parentTerm;
@@ -19,9 +18,8 @@ public class OntologyMatch implements Serializable {
 		// has to be here for GWT serializabl
 	}
 
-	public OntologyMatch(String term, String category) {
+	public OntologyMatch(String term) {
 		this.term = term;
-		this.category = category;
 	}
 
 	public void setMatchingInfo(String ontologyID, String permanentID,
@@ -79,13 +77,4 @@ public class OntologyMatch implements Serializable {
 	public void setTerm(String term) {
 		this.term = term;
 	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
 }

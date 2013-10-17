@@ -36,11 +36,6 @@ public class MatchDetailView extends Composite implements
 		layout.setHTML(row, 1, match.getTerm());
 
 		row++;
-		layout.setHTML(row, 0, "Category: ");
-		cellFormatter.addStyleName(row, 0, "tbl_field_label");
-		layout.setHTML(row, 1, match.getCategory());
-
-		row++;
 		layout.setHTML(row, 0, "Ontology: ");
 		cellFormatter.addStyleName(row, 0, "tbl_field_label");
 		layout.setHTML(row, 1, match.getOntologyID());

@@ -113,9 +113,7 @@ create table term_category_pair (
 drop table if exists ontology_matches;
 create table ontology_matches(
 	ID BIGINT not null auto_increment unique,
-	glossaryType int not null,
 	term varchar(100) not null,
-	category varchar(100) not null,
 	ontologyID varchar(100) not null,
 	permanentID varchar(100) not null,
 	parentTerm varchar(100),
@@ -156,10 +154,10 @@ values
 (6, 'round', 'shape', '', 1, false),
 (7, 'round', 'shape-2', '', 1, false);
 
-insert into ontology_matches(glossaryType, term, category, ontologyID, permanentID, parentTerm, definition) 
+insert into ontology_matches(term, ontologyID, permanentID, parentTerm, definition) 
 values 
-(1, 'red', 'color', 'PATO', 'http://PATO:red0001', 'parent of red', 'the color is red'),
-(1, 'red', 'color', 'PATO', 'http://PATO:red0002', 'parent #2 of red', 'the color is still red');
+('red', 'PATO', 'http://PATO:red0001', 'parent of red', 'the color is red'),
+('red', 'PATO', 'http://PATO:red0002', 'parent #2 of red', 'the color is still red');
 
 
 insert into ontology_submissions(term, category, ontologyID, submittedBy, localID, 

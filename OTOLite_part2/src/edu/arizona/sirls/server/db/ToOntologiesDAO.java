@@ -5,7 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
+import edu.arizona.sirls.ontology_lookup.OntologyLookupClient;
+import edu.arizona.sirls.ontology_lookup.data.Entity;
+import edu.arizona.sirls.ontology_lookup.data.EntityProposals;
+import edu.arizona.sirls.ontology_lookup.data.FormalConcept;
+import edu.arizona.sirls.server.utilities.Utilities;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 import edu.arizona.sirls.shared.beans.to_ontologies.MappingStatus;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyMatch;
@@ -63,8 +69,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 			pstmt.setInt(1, ID);
 			rset = pstmt.executeQuery();
 			if (rset.next()) {
-				match = new OntologyMatch(rset.getString("term"),
-						rset.getString("category"));
+				match = new OntologyMatch(rset.getString("term"));
 				match.setMatchingInfo(rset.getString("ontologyID"),
 						rset.getString("permanentID"),
 						rset.getString("parentTerm"),
@@ -160,32 +165,44 @@ public class ToOntologiesDAO extends AbstractDAO {
 		return submission;
 	}
 
-	public ArrayList<OntologySubmission> getPendingOntologySubmissions()
-			throws SQLException {
+	/**
+	 * get all pending submissions in this upload
+	 * 
+	 * @return
+	 * @param uploadID
+	 * @param thisUploadOnly
+	 * @throws SQLException
+	 */
+	public ArrayList<OntologySubmission> getPendingOntologySubmissions(
+			int uploadID, boolean thisUploadOnly) throws SQLException {
 		ArrayList<OntologySubmission> submissions = new ArrayList<OntologySubmission>();
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		Connection conn = null;
 		try {
 			conn = getConnection();
-			String sql = "select * from ontology_submissions where permanentID is NULL or permanentID = ''";
-			pstmt = conn.prepareStatement(sql);
+			String sql = "select ID, tmpID from ontology_submissions "
+					+ "where permanentID is NULL or permanentID = ''";
+			if (thisUploadOnly) {
+				sql = "select ID, tmpID from "
+						+ "(select a.ID, a.tmpID, b.inUpload from "
+						+ "(select * from ontology_submissions "
+						+ "where permanentID is NULL or permanentID = '') a "
+						+ "left join "
+						+ "(select term, category, 1 as inUpload from term_category_pair "
+						+ "where uploadID = ?) b "
+						+ "on a.term = b.term and a.category = b.category) c "
+						+ "where inUpload = 1;";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, uploadID);
+			} else {
+				pstmt = conn.prepareStatement(sql);
+			}
 			rset = pstmt.executeQuery();
 			while (rset.next()) {
 				OntologySubmission submission = new OntologySubmission();
-				submission.setTerm(rset.getString("term"));
-				submission.setCategory(rset.getString("category"));
 				submission.setSubmissionID(rset.getString("ID"));
-				submission.setSubmittedBy(rset.getString("submittedBy"));
-				submission.setLocalID(rset.getString("localID"));
 				submission.setTmpID(rset.getString("tmpID"));
-				submission.setPermanentID(rset.getString("permanentID"));
-				submission.setSuperClass(rset.getString("superClassID"));
-				submission.setDefinition(rset.getString("definition"));
-				submission.setOntologyID(rset.getString("ontologyID"));
-				submission.setSource(rset.getString("source"));
-				submission.setSynonyms(rset.getString("synonyms"));
-
 				submissions.add(submission);
 			}
 		} finally {
@@ -305,12 +322,9 @@ public class ToOntologiesDAO extends AbstractDAO {
 			}
 
 			// matches: glossary global
-			sql = "select * from ontology_matches where glossaryType = ? "
-					+ "and term = ? and category = ?";
+			sql = "select * from ontology_matches where term = ?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, glossaryType);
-			pstmt.setString(2, term);
-			pstmt.setString(3, category);
+			pstmt.setString(1, term);
 			rset = pstmt.executeQuery();
 			while (rset.next()) {
 				OntologyRecord record = new OntologyRecord(term, category);
@@ -613,6 +627,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 		} finally {
 			closeConnection(conn);
 			close(pstmt);
+			close(rset);
 		}
 
 		// after submissioin, set the new one to be the default mapping
@@ -620,6 +635,115 @@ public class ToOntologiesDAO extends AbstractDAO {
 			updateSelectedOntologyRecord(uploadID, submission.getTerm(),
 					submission.getCategory(), OntologyRecordType.SUBMISSION,
 					submissionID);
+		}
+	}
+
+	/**
+	 * check if there is new ontology match in this upload
+	 * 
+	 * @param uploadID
+	 * @param glossaryType
+	 * @throws Exception
+	 */
+	public void refreshStatusOfMatches(int uploadID) throws Exception {
+		int glossaryType = GeneralDAO.getInstance().getGlossaryTypeByUploadID(
+				uploadID);
+
+		// create ontology lookup client
+		String ontologyName = Utilities
+				.getOntologyNameByGlossaryType(glossaryType);
+
+		// get ontology directory
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		Properties properties = new Properties();
+		properties.load(loader.getResourceAsStream("config.properties"));
+		String ontologyDir = properties.getProperty("ontology_dir");
+		String dictDir = properties.getProperty("dict_dir");
+
+		OntologyLookupClient olclient = new OntologyLookupClient(ontologyName,
+				ontologyDir, dictDir);
+
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		ResultSet rset = null, rset2 = null;
+		try {
+			conn = getConnection();
+			String sql = "select term, category from term_category_pair "
+					+ "where uploadID = ? and removed = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uploadID);
+			pstmt.setBoolean(2, false);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+
+				String term = rset.getString("term");
+				String category = rset.getString("category");
+
+				System.out.println("term: " + term + " (category: " + category
+						+ ")");
+
+				if (category.equalsIgnoreCase("structure")) {
+					// search entity
+					ArrayList<EntityProposals> eps = olclient
+							.searchStrucutre(term);
+
+					for (EntityProposals ep : eps) {
+						for (Entity e : ep.getProposals()) {
+							System.out.println("\tmatch: " + e.getClassIRI());
+							// check if e already exist
+							sql = "select ID from ontology_matches where permanentID = ?";
+							pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, e.getClassIRI());
+							rset2 = pstmt.executeQuery();
+							if (rset2.next()) {
+								// TODO: update?
+							} else {
+								sql = "inert into ontology_matches "
+										+ "(term, ontologyID, permanentID, parentTerm, definition) "
+										+ "values (?, ?, ?, ?, ?)";
+								pstmt = conn.prepareStatement(sql);
+								pstmt.setString(1, term);
+								pstmt.setString(2, ontologyName.toUpperCase());
+								pstmt.setString(3, e.getClassIRI());
+								pstmt.setString(4, e.getPLabel());
+								pstmt.setString(5, e.getDef());
+								pstmt.executeUpdate();
+							}
+						}
+					}
+				} else {
+					// search character
+					ArrayList<FormalConcept> fcs = olclient
+							.searchCharacter(rset.getString("term"));
+					for (FormalConcept fc : fcs) {
+						System.out.println("\tmatch: " + fc.getClassIRI());
+						// check if e already exist
+						sql = "select ID from ontology_matches where permanentID = ?";
+						pstmt = conn.prepareStatement(sql);
+						pstmt.setString(1, fc.getClassIRI());
+						rset2 = pstmt.executeQuery();
+						if (rset2.next()) {
+							// TODO: update?
+						} else {
+							sql = "inert into ontology_matches "
+									+ "(term, ontologyID, permanentID, parentTerm, definition) "
+									+ "values (?, ?, ?, ?, ?)";
+							pstmt = conn.prepareStatement(sql);
+							pstmt.setString(1, term);
+							pstmt.setString(2, "PATO");
+							pstmt.setString(3, fc.getClassIRI());
+							pstmt.setString(4, "");
+							pstmt.setString(5, "");
+							pstmt.executeUpdate();
+						}
+					}
+				}
+			}
+		} finally {
+			closeConnection(conn);
+			close(pstmt);
+			close(rset);
+			close(rset2);
 		}
 	}
 }

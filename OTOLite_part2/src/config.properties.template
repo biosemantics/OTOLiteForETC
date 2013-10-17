@@ -10,4 +10,5 @@ bioportalUrl=http://rest.bioontology.org/bioportal/
 OTO_url=http://biosemantics.arizona.edu/OTO/
 
 #ontology lookup configuration
-local_ontology_dir=
+ontology_dir=
+dict_dir=

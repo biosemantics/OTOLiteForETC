@@ -96,22 +96,4 @@ public class GeneralDAO extends AbstractDAO {
 
 		return glossaryType;
 	}
-
-	public static String getGlossaryNameByID(int glossaryType) {
-		switch (glossaryType) {
-		case 1:
-			return "Plant";
-		case 2:
-			return "Hymenoptera";
-		case 3:
-			return "Algea";
-		case 4:
-			return "Porifera";
-		case 5:
-			return "Fossil";
-		default:
-			return "Plant";
-		}
-	}
-
 }

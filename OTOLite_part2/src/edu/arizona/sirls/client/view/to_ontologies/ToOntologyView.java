@@ -91,6 +91,8 @@ public class ToOntologyView extends Composite implements
 		title_regular.add(new Label("Term (Category) Pairs"));
 
 		updateMatchingStatusBtn = new Image("images/refresh.jpg");
+		updateMatchingStatusBtn
+				.setTitle("Update ontology matches and ontology submissions of terms in this upload. ");
 		updateMatchingStatusBtn.setHeight("20px");
 		updateMatchingStatusBtn.addStyleName("right-align img_btn");
 		title_regular.add(updateMatchingStatusBtn);

@@ -10,6 +10,7 @@ import edu.arizona.sirls.server.bioportal.TermsToOntologiesClient;
 import edu.arizona.sirls.server.db.GeneralDAO;
 import edu.arizona.sirls.server.db.ToOntologiesDAO;
 import edu.arizona.sirls.server.oto.QueryOTO;
+import edu.arizona.sirls.server.utilities.Utilities;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyMatch;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyRecord;
@@ -83,17 +84,13 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 			String uploadID, OperationType type) throws Exception {
 		UploadInfo info = GeneralDAO.getInstance().getUploadInfo(
 				Integer.parseInt(uploadID));
-
-		// set submitted by
-		submission.setSubmittedBy(info.getEtcUserName());
-
 		TermsToOntologiesClient sendToOntologyClient = new TermsToOntologiesClient(
 				info.getBioportalUserID(), info.getBioportalApiKey());
 		if (type.equals(OperationType.NEW_SUBMISSION)) {
 			// get uuid first
 			submission.setLocalID(QueryOTO.getInstance().getUUID(
 					submission.getTerm(), submission.getCategory(),
-					GeneralDAO.getGlossaryNameByID(info.getGlossaryType()),
+					Utilities.getGlossaryNameByID(info.getGlossaryType()),
 					submission.getDefinition()));
 
 			// submit to bioportal
@@ -126,8 +123,28 @@ public class ToOntologiesServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void refreshOntologyStatus(String uploadID) throws Exception {
-		// TODO Auto-generated method stub
+		/**
+		 * update matches
+		 */
+		ToOntologiesDAO.getInstance().refreshStatusOfMatches(
+				Integer.parseInt(uploadID));
 
+		/**
+		 * update submissions if has bioportal info associated with this upload
+		 */
+		// check if has bioportal info
+		UploadInfo info = GeneralDAO.getInstance().getUploadInfo(
+				Integer.parseInt(uploadID));
+		String bioportalUser = info.getBioportalUserID();
+		String bioportalApiKey = info.getBioportalApiKey();
+		if (info.getBioportalApiKey() != null && !bioportalApiKey.equals("")
+				&& info.getBioportalUserID() != null
+				&& !bioportalUser.equals("")) {
+			TermsToOntologiesClient bioportalClient = new TermsToOntologiesClient(
+					info.getBioportalUserID(), info.getBioportalApiKey());
+			bioportalClient.refreshSubmissionsStatus(
+					Integer.parseInt(uploadID), true);
+		}
 	}
 
 }

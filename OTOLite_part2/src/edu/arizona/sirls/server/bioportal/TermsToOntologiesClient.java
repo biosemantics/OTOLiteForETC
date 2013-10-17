@@ -3,9 +3,7 @@ package edu.arizona.sirls.server.bioportal;
 import java.io.IOException;
 import java.io.StringReader;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.xml.bind.JAXBElement;
@@ -45,12 +43,25 @@ public class TermsToOntologiesClient {
 				bioportalAPIKey);
 	}
 
-	public int getPermanentIDs() throws SQLException, JAXBException,
-			ClassNotFoundException, IOException {
+	/**
+	 * return how many submissions were accepted since last check
+	 * 
+	 * @param uploadID
+	 * @param thisUploadOnly
+	 * @return
+	 * @throws SQLException
+	 * @throws JAXBException
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public int refreshSubmissionsStatus(int uploadID, boolean thisUploadOnly)
+			throws SQLException, JAXBException, ClassNotFoundException,
+			IOException {
 		int count = 0;
 		try {
 			List<OntologySubmission> pendingSubmissions = ToOntologiesDAO
-					.getInstance().getPendingOntologySubmissions();
+					.getInstance().getPendingOntologySubmissions(uploadID,
+							thisUploadOnly);
 			for (OntologySubmission submission : pendingSubmissions) {
 				String permanentId = null;
 				Success success = bioPortalClient.getProvisionalTerm(submission
@@ -89,49 +100,6 @@ public class TermsToOntologiesClient {
 		}
 
 		return count;
-	}
-
-	/**
-	 * Refresh all the awaiting submissions: try to get permanent id for them
-	 * 
-	 * @return Map<Temporary ID, Permanent ID> of newly discovered adoptions
-	 * @throws Exception
-	 */
-	public Map<String, String> checkTermAdoptions() throws Exception {
-		Map<String, String> result = new HashMap<String, String>();
-		List<OntologySubmission> pendingSubmissions = ToOntologiesDAO
-				.getInstance().getPendingOntologySubmissions();
-		for (OntologySubmission provisionalTerm : pendingSubmissions) {
-			String permanentId = null;
-			Success success = bioPortalClient
-					.getProvisionalTerm(provisionalTerm.getTmpID());
-			List<Object> fullIdOrIdOrLabels = success.getData().getClassBean()
-					.getFullIdOrIdOrLabel();
-			for (Object fullIdOrIdOrLabel : fullIdOrIdOrLabels) {
-				if (fullIdOrIdOrLabel instanceof Relations) {
-					Relations relations = (Relations) fullIdOrIdOrLabel;
-					List<Entry> entries = relations.getEntry();
-					for (Entry entry : entries) {
-						List<Object> objects = entry.getStringOrList();
-						if (objects.size() >= 2
-								&& objects.get(0).equals(
-										"provisionalPermanentId")) {
-							permanentId = (String) objects.get(1);
-						}
-					}
-				}
-			}
-
-			if (permanentId == null)
-				continue;
-			else {
-				provisionalTerm.setPermanentID(permanentId);
-				ToOntologiesDAO.getInstance().updatePermanentIDOfSubmission(
-						Integer.parseInt(provisionalTerm.getSubmissionID()));
-				result.put(provisionalTerm.getTmpID(), permanentId);
-			}
-		}
-		return result;
 	}
 
 	private String getIdFromSuccessfulCreate(Success createSuccess,
@@ -193,7 +161,7 @@ public class TermsToOntologiesClient {
 	}
 
 	public void deleteTerm(OntologySubmission submission) throws Exception {
-		bioPortalClient.deleteProvisionalTerm(submission.getTmpID());		
+		bioPortalClient.deleteProvisionalTerm(submission.getTmpID());
 	}
 
 	public static void main(String[] args) throws IOException, JAXBException,

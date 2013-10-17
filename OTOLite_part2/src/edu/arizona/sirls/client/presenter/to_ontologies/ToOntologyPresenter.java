@@ -115,7 +115,7 @@ public class ToOntologyPresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Window.alert("TODO: update matching status of entire list");
+				refreshMatchSubmissionsStatus();
 			}
 		});
 
@@ -269,6 +269,25 @@ public class ToOntologyPresenter implements Presenter {
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Server Error: failed to submit submission to bioportal. \n\n"
+								+ caught.getMessage());
+					}
+				});
+	}
+
+	private void refreshMatchSubmissionsStatus() {
+		rpcService.refreshOntologyStatus(MainPresenter.uploadID,
+				new AsyncCallback<Void>() {
+
+					@Override
+					public void onSuccess(Void result) {
+						// update the match and submission part
+						updateMatchesAndSubmissions(selectedTerm,
+								selectedCategory);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Server Error: failed to Update ontology matches and ontology submissions of terms in this upload. \n\n"
 								+ caught.getMessage());
 					}
 				});
@@ -490,6 +509,9 @@ public class ToOntologyPresenter implements Presenter {
 	 * @param category
 	 */
 	private void updateMatchesAndSubmissions(String term, String category) {
+		if (term.equals("") || category.equals("")) {
+			return;
+		}
 		final String selectedTerm = term;
 		final String selectedCategory = category;
 		display.getRightPanel().clear();
