@@ -30,7 +30,7 @@ public class ContextContentView extends Composite implements
 				}
 			};
 			table.addColumn(sourceColumn, "Source");
-			table.setColumnWidth(sourceColumn, "30%");
+			table.setColumnWidth(sourceColumn, "20%");
 
 			// second column: sentence
 			TextColumn<TermContext> sentenceColumn = new TextColumn<TermContext>() {
@@ -41,7 +41,7 @@ public class ContextContentView extends Composite implements
 				}
 			};
 			table.addColumn(sentenceColumn, "Sentence");
-			table.setColumnWidth(sentenceColumn, "70%");
+			table.setColumnWidth(sentenceColumn, "80%");
 
 			// fill in data
 			table.setRowCount(contexts.size());

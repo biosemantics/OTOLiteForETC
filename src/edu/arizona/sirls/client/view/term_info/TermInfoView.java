@@ -5,9 +5,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.arizona.sirls.client.presenter.term_info.ContextPresenter;
+import edu.arizona.sirls.client.presenter.term_info.TermInfoPresenter;
 
-public class ContextView extends Composite implements ContextPresenter.Display {
+public class TermInfoView extends Composite implements TermInfoPresenter.Display {
 	private TabPanel tabPanel;
 	private int currentTabIndex;
 	private SimplePanel currentTabContent;
@@ -16,7 +16,7 @@ public class ContextView extends Composite implements ContextPresenter.Display {
 	private SimplePanel glossaryContent;
 	private String term;
 
-	public ContextView() {
+	public TermInfoView() {
 		tabPanel = new TabPanel();
 		tabPanel.setSize("100%", "100%");
 		initWidget(tabPanel);

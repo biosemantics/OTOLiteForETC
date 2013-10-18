@@ -6,6 +6,8 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.arizona.sirls.client.rpc.TermInfoService;
 import edu.arizona.sirls.server.db.ContextDAO;
+import edu.arizona.sirls.server.oto.QueryOTO;
+import edu.arizona.sirls.server.utilities.Utilities;
 import edu.arizona.sirls.shared.beans.term_info.TermContext;
 import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
 import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
@@ -28,13 +30,8 @@ public class TermInfoServiceIml extends RemoteServiceServlet implements
 	@Override
 	public ArrayList<TermGlossary> getTermGlossary(String term,
 			String glossaryType) throws Exception {
-		// test
-		TermGlossary gloss = new TermGlossary("term category",
-				"term definition");
-		ArrayList<TermGlossary> list = new ArrayList<TermGlossary>();
-		list.add(gloss);
-
-		return list;
+		return QueryOTO.getInstance().getGlossaryInfo(term,
+				Utilities.getGlossaryNameByID(Integer.parseInt(glossaryType)));
 	}
 
 	@Override

@@ -1,8 +1,12 @@
 package edu.arizona.sirls.server.oto;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 import oto.full.OTOClient;
+import oto.full.beans.GlossaryDictionaryEntry;
 
 public class QueryOTO extends AbstractOTOAccessObject {
 
@@ -35,6 +39,31 @@ public class QueryOTO extends AbstractOTOAccessObject {
 		OTOClient otoClient = createOTOClient();
 		return otoClient.insertAndGetGlossaryDictionaryEntry(glossaryType,
 				term, category, definition).getTermID();
+	}
+
+	/**
+	 * get the <category, definition> list for a given term in a given glossary
+	 * type
+	 * 
+	 * @param term
+	 * @param glossaryType
+	 * @return
+	 */
+	public ArrayList<TermGlossary> getGlossaryInfo(String term,
+			String glossaryType) {
+		ArrayList<TermGlossary> glossaries = new ArrayList<TermGlossary>();
+
+		OTOClient otoClient = createOTOClient();
+
+		List<GlossaryDictionaryEntry> entryList = otoClient
+				.getGlossaryDictionaryEntries(glossaryType, term);
+		for (GlossaryDictionaryEntry entry : entryList) {
+			TermGlossary glossary = new TermGlossary(entry.getCategory(),
+					entry.getDefinition());
+			glossaries.add(glossary);
+		}
+
+		return glossaries;
 	}
 
 }

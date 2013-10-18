@@ -26,7 +26,7 @@ import edu.arizona.sirls.shared.beans.term_info.TermContext;
 import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
 import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 
-public class ContextPresenter implements Presenter {
+public class TermInfoPresenter implements Presenter {
 
 	public static interface Display {
 		TabPanel getTabPanel();
@@ -50,7 +50,7 @@ public class ContextPresenter implements Presenter {
 	private HandlerManager globalEventBus;
 	private TermInfoServiceAsync rpcService = GWT.create(TermInfoService.class);
 
-	public ContextPresenter(Display display, HandlerManager globalEventBus) {
+	public TermInfoPresenter(Display display, HandlerManager globalEventBus) {
 		this.display = display;
 		this.globalEventBus = globalEventBus;
 	}

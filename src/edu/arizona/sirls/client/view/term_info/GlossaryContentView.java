@@ -29,7 +29,7 @@ public class GlossaryContentView extends Composite implements
 				}
 			};
 			table.addColumn(categoryColumn, "Category");
-			table.setColumnWidth(categoryColumn, "30%");
+			table.setColumnWidth(categoryColumn, "25%");
 
 			// second column: sentence
 			TextColumn<TermGlossary> definitionColumn = new TextColumn<TermGlossary>() {
@@ -39,8 +39,8 @@ public class GlossaryContentView extends Composite implements
 					return object.getDefinition();
 				}
 			};
-			table.addColumn(definitionColumn, "Sentence");
-			table.setColumnWidth(definitionColumn, "70%");
+			table.addColumn(definitionColumn, "Definition");
+			table.setColumnWidth(definitionColumn, "80%");
 
 			// fill in data
 			table.setRowCount(glossaries.size());
