@@ -510,7 +510,8 @@ public class ToOntologyPresenter implements Presenter {
 	 * @param category
 	 */
 	private void updateMatchesAndSubmissions(String term, String category) {
-		if (term.equals("") || category.equals("")) {
+		if (term == null || category == null || term.equals("")
+				|| category.equals("")) {
 			return;
 		}
 		final String selectedTerm = term;

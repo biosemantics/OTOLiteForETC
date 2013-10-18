@@ -160,12 +160,10 @@ public class OrderDAO extends AbstractDAO {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, categoryID);
 				rset2 = pstmt.executeQuery();
-				pstmt.close();
 				
 				while (rset2.next()) {
 					baseTerms.add(rset2.getString("termName"));
 				}
-				rset2.close();
 				orderSet.setTerms(baseTerms);
 
 				// get orders in this category
@@ -234,11 +232,9 @@ public class OrderDAO extends AbstractDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, categoryID);
 			rset = pstmt.executeQuery();
-			pstmt.close();
 			while (rset.next()) {
 				baseTerms.add(rset.getString("termName"));
 			}
-			rset.close();
 			orderSet.setTerms(baseTerms);
 
 			// get orders in this category
