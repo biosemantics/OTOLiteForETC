@@ -91,6 +91,9 @@ public class OrderDAO extends AbstractDAO {
 
 			conn.commit();
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			closeConnection(conn);
 			close(st);
@@ -115,6 +118,9 @@ public class OrderDAO extends AbstractDAO {
 				categories.add(new OrderCategory(rset.getString("categoryID"),
 						rset.getString("categoryName")));
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			closeConnection(conn);
 			close(rset);
@@ -154,9 +160,12 @@ public class OrderDAO extends AbstractDAO {
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setInt(1, categoryID);
 				rset2 = pstmt.executeQuery();
+				pstmt.close();
+				
 				while (rset2.next()) {
 					baseTerms.add(rset2.getString("termName"));
 				}
+				rset2.close();
 				orderSet.setTerms(baseTerms);
 
 				// get orders in this category
@@ -196,13 +205,14 @@ public class OrderDAO extends AbstractDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw e;
 		} finally {
 			// close everything with or without exception
-			closeConnection(conn);
 			close(rset);
 			close(rset2);
 			close(rset3);
 			close(pstmt);
+			closeConnection(conn);
 		}
 
 		return orderSets;
@@ -224,9 +234,11 @@ public class OrderDAO extends AbstractDAO {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, categoryID);
 			rset = pstmt.executeQuery();
+			pstmt.close();
 			while (rset.next()) {
 				baseTerms.add(rset.getString("termName"));
 			}
+			rset.close();
 			orderSet.setTerms(baseTerms);
 
 			// get orders in this category
@@ -259,12 +271,15 @@ public class OrderDAO extends AbstractDAO {
 				orders.add(order);
 			}
 			orderSet.setOrders(orders);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			// close everything with or without exception
-			closeConnection(conn);
 			close(rset);
 			close(rset2);
 			close(pstmt);
+			closeConnection(conn);
 		}
 
 		return orderSet;

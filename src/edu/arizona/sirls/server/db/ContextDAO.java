@@ -43,6 +43,9 @@ public class ContextDAO extends AbstractDAO {
 						rset.getString(2));
 				contexts.add(context);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			closeConnection(conn);
 			close(pstmt);

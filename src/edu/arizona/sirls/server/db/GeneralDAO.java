@@ -3,6 +3,7 @@ package edu.arizona.sirls.server.db;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import edu.arizona.sirls.shared.beans.UploadInfo;
 
@@ -51,6 +52,9 @@ public class GeneralDAO extends AbstractDAO {
 				info.setUploadTime(rset.getDate("uploadTime"));
 				info.setSource(rset.getString("source"));
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			closeConnection(conn);
 			close(pstmt);
@@ -82,6 +86,9 @@ public class GeneralDAO extends AbstractDAO {
 			if (rset.next()) {
 				glossaryType = rset.getInt(1);
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
 		} finally {
 			closeConnection(conn);
 			close(pstmt);

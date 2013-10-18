@@ -281,6 +281,7 @@ public class ToOntologyPresenter implements Presenter {
 					@Override
 					public void onSuccess(Void result) {
 						// update the match and submission part
+						Window.alert("Updated ontology matches and submissions successfully. ");
 						updateMatchesAndSubmissions(selectedTerm,
 								selectedCategory);
 					}

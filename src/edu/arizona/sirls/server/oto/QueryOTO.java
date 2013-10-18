@@ -3,7 +3,6 @@ package edu.arizona.sirls.server.oto;
 import java.io.IOException;
 
 import oto.full.OTOClient;
-import oto.full.beans.GlossaryDictionaryEntry;
 
 public class QueryOTO extends AbstractOTOAccessObject {
 
