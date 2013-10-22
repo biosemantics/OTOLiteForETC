@@ -123,8 +123,9 @@ public class SingleOrderSetPresenter implements Presenter {
 														+ "You'll lose the changes when you close this category. "
 														+ "\n\nDo you want to close anyway? ")) {
 											preventClose.removeHandler();
+											preventClose = null;
 										} else {
-											event.cancel();
+											event.cancel();											
 										}
 									}
 								}

@@ -19,13 +19,13 @@
 }
 
 .ORDERS_droppable_container {
-	width: 100%;
+	min-height: 20px;
+	min-width: 50px;
 	height: 100%;
+	width: 100%;
 }
 
-.ORDERS_order_box_cell {
-	width: 50px;
-	height: 20px;
+.ORDERS_order_box_cell {	
 	border: 1px solid green;
 }
 
@@ -47,4 +47,8 @@
 
 .ORDERS_selected_term {
 	font-weight: bold;
+}
+
+.ORDERS_drag_over {
+	border: 1px dotted gray;
 }

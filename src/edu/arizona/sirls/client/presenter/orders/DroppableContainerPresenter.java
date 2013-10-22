@@ -79,7 +79,8 @@ public class DroppableContainerPresenter implements Presenter {
 
 			@Override
 			public void onDragOver(DragOverEvent event) {
-				// nothing to do here
+				// onDragOver is required here
+				display.getContainer().addStyleName("ORDERS_drag_over");
 			}
 		}, DragOverEvent.getType());
 
@@ -87,7 +88,7 @@ public class DroppableContainerPresenter implements Presenter {
 
 			@Override
 			public void onDragLeave(DragLeaveEvent event) {
-				// nothing to do here
+				display.getContainer().removeStyleName("ORDERS_drag_over");
 			}
 		}, DragLeaveEvent.getType());
 
@@ -95,6 +96,7 @@ public class DroppableContainerPresenter implements Presenter {
 
 			@Override
 			public void onDrop(DropEvent event) {
+				display.getContainer().removeStyleName("ORDERS_drag_over");
 				eventBus.fireEvent(new DropTermToBoxEvent(
 						(DroppableContainerView) display));
 			}

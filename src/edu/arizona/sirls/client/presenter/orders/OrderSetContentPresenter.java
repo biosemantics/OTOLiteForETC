@@ -26,12 +26,14 @@ import edu.arizona.sirls.client.event.orders.DragTermStartEventHandler;
 import edu.arizona.sirls.client.event.orders.DropTermToBoxEvent;
 import edu.arizona.sirls.client.event.orders.DropTermToBoxEventHandler;
 import edu.arizona.sirls.client.presenter.Presenter;
+import edu.arizona.sirls.client.presenter.general.ConfirmDialogCallback;
 import edu.arizona.sirls.client.rpc.OrderServiceAsync;
 import edu.arizona.sirls.client.view.orders.DraggableTermView;
 import edu.arizona.sirls.client.view.orders.DroppableContainerView;
 import edu.arizona.sirls.client.view.orders.OrderNameLabelView;
 import edu.arizona.sirls.client.view.orders.OrderTblView;
 import edu.arizona.sirls.client.view.orders.Styles;
+import edu.arizona.sirls.client.widget.Dialog;
 import edu.arizona.sirls.shared.beans.orders.Order;
 import edu.arizona.sirls.shared.beans.orders.OrderSet;
 
@@ -110,8 +112,6 @@ public class OrderSetContentPresenter implements Presenter {
 			@Override
 			public void onClick(ClickTermEvent event) {
 				highlightTerm(event.getTermName());
-
-				// TODO: show context
 			}
 		});
 
@@ -133,19 +133,32 @@ public class OrderSetContentPresenter implements Presenter {
 				new DragTermEndEventHandler() {
 
 					@Override
-					public void onDragTermEnd(DragTermEndEvent event) {
+					public void onDragTermEnd(final DragTermEndEvent event) {
 						/**
 						 * detect if the user is trying to remove a term out of
 						 * an order; drag end fired after on drop
 						 */
 						if (!hitValidDroppableBox && !termDragged.isFromBase()) {
 							String termName = termDragged.getTermName();
-							if (Window.confirm("Do you want to remove term '"
-									+ termName + "' from this order? ")) {
-								removeDraggedTermFromOrder();
-								highlightTermsInBase(event.getWidget()
-										.getParentOrder().getTermsList());
-							}
+							Dialog.confirm("Confirm",
+									"Do you want to remove term '" + termName
+											+ "' from this order? ",
+									new ConfirmDialogCallback() {
+
+										@Override
+										public void onCancel() {
+											// do nothing
+										}
+
+										@Override
+										public void onAffirmative() {
+											removeDraggedTermFromOrder();
+											highlightTermsInBase(event
+													.getWidget()
+													.getParentOrder()
+													.getTermsList());
+										}
+									});
 						}
 					}
 				});

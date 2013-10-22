@@ -25,7 +25,6 @@ public class DroppableContainerView extends Composite implements
 
 		panel = new FlowPanel();
 		panel.addStyleName("ORDERS_droppable_container");
-		panel.setSize("100%", "100%");
 		initWidget(panel);
 
 	}
