@@ -4,7 +4,7 @@
 }
 
 .gwt-TabPanelBottom {
-	
+	height: 100%;
 }
 
 .gwt-TabBar {
@@ -22,7 +22,15 @@
 }
 
 .contentPanel {
-	min-height: 300px;
+	overflow: auto;
+}
+
+.main_tab_panel tr{
+	
+}
+
+.main_tab_panel tr:first-child {
+	
 }
 
 .right_container {

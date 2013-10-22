@@ -78,7 +78,7 @@ public class ToOntologyView extends Composite implements
 		layout.getCellFormatter().setWidth(0, 2, "30%");
 		layout.getCellFormatter().setHeight(0, 2, "100%");
 		rightPanel.setWidth("100%");
-		layout.getFlexCellFormatter().setAlignment(0, 3,
+		layout.getFlexCellFormatter().setAlignment(0, 2,
 				HasHorizontalAlignment.ALIGN_LEFT,
 				HasVerticalAlignment.ALIGN_TOP);
 	}

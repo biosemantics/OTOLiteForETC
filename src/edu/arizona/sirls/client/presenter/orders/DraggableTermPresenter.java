@@ -65,6 +65,9 @@ public class DraggableTermPresenter implements Presenter {
 
 			@Override
 			public void onDragStart(DragStartEvent event) {
+				//has to setData here in order for firefox to work
+				event.setData("dummy_data", display.getTermName());
+				
 				eventBus.fireEvent(new DragTermStartEvent(
 						(DraggableTermView) display.asWidget()));
 
