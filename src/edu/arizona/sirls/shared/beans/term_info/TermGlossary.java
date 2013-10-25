@@ -7,6 +7,7 @@ public class TermGlossary implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2191681473010354133L;
+	private String id;
 	private String category;
 	private String definition;
 
@@ -14,7 +15,8 @@ public class TermGlossary implements Serializable {
 
 	}
 
-	public TermGlossary(String category, String definition) {
+	public TermGlossary(String id, String category, String definition) {
+		this.id = id;
 		this.category = category;
 		this.definition = definition;
 	}
@@ -33,5 +35,13 @@ public class TermGlossary implements Serializable {
 
 	public void setDefinition(String definition) {
 		this.definition = definition;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

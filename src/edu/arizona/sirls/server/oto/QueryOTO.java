@@ -58,7 +58,8 @@ public class QueryOTO extends AbstractOTOAccessObject {
 		List<GlossaryDictionaryEntry> entryList = otoClient
 				.getGlossaryDictionaryEntries(glossaryType, term);
 		for (GlossaryDictionaryEntry entry : entryList) {
-			TermGlossary glossary = new TermGlossary(entry.getCategory(),
+			TermGlossary glossary = new TermGlossary("OTO ID: "
+					+ entry.getTermID(), entry.getCategory(),
 					entry.getDefinition());
 			glossaries.add(glossary);
 		}

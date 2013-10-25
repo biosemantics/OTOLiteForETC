@@ -30,7 +30,7 @@ public class TermInfoView extends Composite implements TermInfoPresenter.Display
 		// create glossary tab
 		glossaryContent = new SimplePanel();
 		glossaryContent.setSize("100%", "100%");
-		tabPanel.add(glossaryContent, "Glossary");
+		tabPanel.add(glossaryContent, "Ontology");
 
 		// create definition tab
 		definitionContent = new SimplePanel();

@@ -20,7 +20,18 @@ public class GlossaryContentView extends Composite implements
 			table.setSize("100%", "100%");
 			initWidget(table);
 
-			// first column: category
+			// first column: id
+			TextColumn<TermGlossary> idColumn = new TextColumn<TermGlossary>() {
+
+				@Override
+				public String getValue(TermGlossary object) {
+					return object.getId();
+				}
+			};
+			table.addColumn(idColumn, "ID");
+			table.setColumnWidth(idColumn, "20%");
+
+			// second column: category
 			TextColumn<TermGlossary> categoryColumn = new TextColumn<TermGlossary>() {
 
 				@Override
@@ -29,9 +40,9 @@ public class GlossaryContentView extends Composite implements
 				}
 			};
 			table.addColumn(categoryColumn, "Category");
-			table.setColumnWidth(categoryColumn, "25%");
+			table.setColumnWidth(categoryColumn, "10%");
 
-			// second column: sentence
+			// third column: sentence
 			TextColumn<TermGlossary> definitionColumn = new TextColumn<TermGlossary>() {
 
 				@Override
@@ -40,7 +51,7 @@ public class GlossaryContentView extends Composite implements
 				}
 			};
 			table.addColumn(definitionColumn, "Definition");
-			table.setColumnWidth(definitionColumn, "80%");
+			table.setColumnWidth(definitionColumn, "70%");
 
 			// fill in data
 			table.setRowCount(glossaries.size());

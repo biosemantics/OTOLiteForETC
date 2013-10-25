@@ -13,6 +13,7 @@ import edu.arizona.sirls.ontology_lookup.data.EntityProposals;
 import edu.arizona.sirls.ontology_lookup.data.FormalConcept;
 import edu.arizona.sirls.server.utilities.Utilities;
 import edu.arizona.sirls.shared.beans.UploadInfo;
+import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 import edu.arizona.sirls.shared.beans.to_ontologies.MappingStatus;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyMatch;
 import edu.arizona.sirls.shared.beans.to_ontologies.OntologyRecord;
@@ -305,6 +306,68 @@ public class ToOntologiesDAO extends AbstractDAO {
 	}
 
 	/**
+	 * for term_info part, get the ontology match records for a given term
+	 * 
+	 * @param term
+	 * @param glossaryType
+	 * @return
+	 * @throws SQLException
+	 */
+	public ArrayList<TermGlossary> getOntologyMatchForTerm(String term,
+			int glossaryType) throws SQLException {
+		ArrayList<TermGlossary> glossies = new ArrayList<TermGlossary>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null, rset2 = null;
+
+		try {
+			conn = getConnection();
+			String sql = "select category, recordType, recordID "
+					+ "from selected_ontology_records "
+					+ "where glossaryType = ? and term = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, glossaryType);
+			pstmt.setString(2, term);
+			rset = pstmt.executeQuery();
+			while (rset.next()) {
+				String category = rset.getString("category");
+				// get id and definition
+				OntologyRecordType recordType = translateToOntologyRecordType(rset
+						.getInt("recordType"));
+				String id_prefix = "Ontology ID: ";
+				if (recordType.equals(OntologyRecordType.SUBMISSION)) {
+					id_prefix = "Temporary ID: ";
+					sql = "select tmpID as id, definition from ontology_submissions where ID = ?";
+				} else {
+					sql = "select permanentID as id, definition from ontology_matches where ID = ?";
+				}
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, rset.getInt("recordID"));
+				rset2 = pstmt.executeQuery();
+				if (rset2.next()) {
+					String id = rset2.getString(1);
+					if (recordType.equals(OntologyRecordType.MATCH)) {
+						id = truncatePermanentID(id);
+					}
+					TermGlossary gloss = new TermGlossary(id_prefix + id,
+							category, rset2.getString(2));
+					glossies.add(gloss);
+				}
+
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			close(rset);
+			close(pstmt);
+			closeConnection(conn);
+		}
+
+		return glossies;
+	}
+
+	/**
 	 * get both matches and submissions as ontology record
 	 * 
 	 * @param uploadID
@@ -355,10 +418,8 @@ public class ToOntologiesDAO extends AbstractDAO {
 				record.setDefinition(rset_match.getString("definition"));
 
 				// parse permanentID, only the last part
-				String pID = rset_match.getString("permanentID");
-				if (pID.lastIndexOf("/") > 0) {
-					pID = pID.substring(pID.lastIndexOf("/") + 1, pID.length());
-				}
+				String pID = truncatePermanentID(rset_match
+						.getString("permanentID"));
 
 				record.setOntology(rset_match.getString("ontologyID") + " ["
 						+ pID + "]");
@@ -410,6 +471,20 @@ public class ToOntologiesDAO extends AbstractDAO {
 		}
 
 		return records;
+	}
+
+	/**
+	 * truncate the url part of permanentID
+	 * 
+	 * @param pID
+	 * @return
+	 */
+	public String truncatePermanentID(String pID) {
+		if (pID.lastIndexOf("/") > 0) {
+			return pID.substring(pID.lastIndexOf("/") + 1, pID.length());
+		} else {
+			return pID;
+		}
 	}
 
 	/**
