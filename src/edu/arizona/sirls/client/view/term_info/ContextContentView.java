@@ -2,7 +2,10 @@ package edu.arizona.sirls.client.view.term_info;
 
 import java.util.ArrayList;
 
+import com.google.gwt.cell.client.ClickableTextCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
@@ -20,7 +23,7 @@ public class ContextContentView extends Composite implements
 			CellTable<TermContext> table = new CellTable<TermContext>();
 			table.setSize("100%", "100%");
 			initWidget(table);
-
+			
 			// first column: source
 			TextColumn<TermContext> sourceColumn = new TextColumn<TermContext>() {
 
