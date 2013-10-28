@@ -189,3 +189,25 @@ create table selected_ontology_records (
 insert into selected_ontology_records
 (term, category, glossaryType, recordType, recordID)
 values ('red', 'color', 1, 1, 1);
+
+
+/*heirarchy page*/
+drop table if exists structures;
+create table structures (
+	ID BIGINT not null auto_increment unique,
+	uploadID BIGINT not null,
+	term varchar(100) not null,
+	isMannuallyCreated boolean default false,
+
+	primary key (ID)
+);
+
+drop table if exists trees;
+create table trees (
+	ID BIGINT not null auto_increment unique,
+	uploadID BIGINT not null,
+	termID BIGINT not null,
+	pID BIGINT,	
+
+	primary key (ID)
+);
