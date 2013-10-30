@@ -1,5 +1,5 @@
 package edu.arizona.sirls.client.presenter.hierarchy;
 
-public class OtoTreeRootPresenter {
-
+public enum DragType {
+	STRUCTURE, TREENODE
 }

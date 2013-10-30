@@ -10,7 +10,7 @@ public class OrdersPageView extends Composite implements
 		OrdersPagePresenter.Display {
 	private VerticalPanel panel;
 
-	public OrdersPageView() {		
+	public OrdersPageView() {
 		panel = new VerticalPanel();
 		panel.setWidth("100%");
 		initWidget(panel);

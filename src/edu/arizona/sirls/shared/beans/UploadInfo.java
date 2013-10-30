@@ -15,6 +15,7 @@ public class UploadInfo implements Serializable {
 	private String prefixForOTO;
 	private boolean readyToDelete;
 	private int glossaryType;
+	private String glossaryTypeName;
 	private String bioportalUserID;
 	private String bioportalApiKey;
 	private String EtcUserName;
@@ -134,6 +135,14 @@ public class UploadInfo implements Serializable {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	public String getGlossaryTypeName() {
+		return glossaryTypeName;
+	}
+
+	public void setGlossaryTypeName(String glossaryTypeName) {
+		this.glossaryTypeName = glossaryTypeName;
 	}
 
 }

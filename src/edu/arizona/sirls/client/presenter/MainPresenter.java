@@ -11,10 +11,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.presenter.hierarchy.HierarchyPagePresenter;
 import edu.arizona.sirls.client.presenter.orders.OrdersPagePresenter;
 import edu.arizona.sirls.client.presenter.to_ontologies.ToOntologyPresenter;
 import edu.arizona.sirls.client.rpc.GeneralService;
 import edu.arizona.sirls.client.rpc.GeneralServiceAsync;
+import edu.arizona.sirls.client.view.hierarchy.HierarchyPageView;
 import edu.arizona.sirls.client.view.orders.OrdersPageView;
 import edu.arizona.sirls.client.view.to_ontologies.ToOntologyView;
 import edu.arizona.sirls.shared.beans.UploadInfo;
@@ -61,7 +63,9 @@ public class MainPresenter implements Presenter {
 									.getToOntologiesContentContainer());
 							break;
 						case 1:
-							// Window.alert("TODO: hierarchy page");
+							new HierarchyPagePresenter(new HierarchyPageView(),
+									globalEventBus).go(display
+									.getHierarchyContentContainer());
 							break;
 						case 2:
 							new OrdersPagePresenter(new OrdersPageView(),
@@ -81,7 +85,6 @@ public class MainPresenter implements Presenter {
 		container.clear();
 		container.add(display.asWidget());
 		fetchUploadInfo();
-		display.getTabPanel().selectTab(0);
 	}
 
 	private void fetchUploadInfo() {
@@ -90,6 +93,7 @@ public class MainPresenter implements Presenter {
 			@Override
 			public void onSuccess(UploadInfo result) {
 				uploadInfo = result;
+				display.getTabPanel().selectTab(1);
 			}
 
 			@Override

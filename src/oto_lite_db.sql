@@ -197,7 +197,7 @@ create table structures (
 	ID BIGINT not null auto_increment unique,
 	uploadID BIGINT not null,
 	term varchar(100) not null,
-	isMannuallyCreated boolean default false,
+	userCreated boolean default false,
 
 	primary key (ID)
 );

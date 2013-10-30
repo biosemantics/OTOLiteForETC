@@ -25,7 +25,7 @@
 	width: 100%;
 }
 
-.ORDERS_order_box_cell {	
+.ORDERS_order_box_cell {
 	border: 1px solid green;
 }
 
@@ -51,4 +51,10 @@
 
 .ORDERS_drag_over {
 	border: 1px dotted gray;
+}
+
+.ORDERS_main_panel {
+	height: 100%;
+	width: 100%;
+	overflow: auto;
 }

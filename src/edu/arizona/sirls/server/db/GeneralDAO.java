@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import edu.arizona.sirls.server.utilities.Utilities;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 
 /**
@@ -46,6 +47,8 @@ public class GeneralDAO extends AbstractDAO {
 				info.setEtcUserName(rset.getString("EtcUser"));
 				info.setFinalized(rset.getBoolean("isFinalized"));
 				info.setGlossaryType(rset.getInt("glossaryType"));
+				info.setGlossaryTypeName(Utilities.getGlossaryNameByID(rset
+						.getInt("glossaryType")));
 				info.setHasSentToOTO(rset.getBoolean("sentToOTO"));
 				info.setPrefixForOTO(rset.getString("prefixForOTO"));
 				info.setReadyToDelete(rset.getBoolean("readyToDelete"));

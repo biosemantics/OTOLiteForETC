@@ -1,0 +1,23 @@
+.HIERARCHY_title {
+	background-color: #307137;
+	color: white;
+	height: 25px;
+	width: 100%;
+	font-size: 18px;
+	font-weight: bold;
+	vertical-align: middle;
+	padding-top: 2px;
+}
+
+.HIERARCHY_structure_label {
+	/*background-color: #D6F8CD;*/
+	cursor: pointer;
+}
+
+.HIERARCHY_node_drag_over {
+	background-color: #D6F8CD;
+}
+
+.HIERARCHY_left_structure_list {
+	border: 1px solid #307137;
+}

@@ -34,6 +34,16 @@
 		<servlet-name>ToOntologiesServiceImpl</servlet-name>
 		<url-pattern>/otolite_part2/toOntologies</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HierarchyServiceImpl</servlet-name>
+		<servlet-class>edu.arizona.sirls.server.rpc.HierarchyServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>HierarchyServiceImpl</servlet-name>
+		<url-pattern>/otolite_part2/hierarchy</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>OrderServiceImpl</servlet-name>
