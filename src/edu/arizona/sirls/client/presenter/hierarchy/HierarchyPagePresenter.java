@@ -81,7 +81,7 @@ public class HierarchyPagePresenter implements Presenter {
 		container.add(display.asWidget());
 		bindEvents();
 		fetchStructures();
-		getRootNode();
+		getRootNode("Loading tree ...");
 		fetchTree();
 	}
 
@@ -126,14 +126,11 @@ public class HierarchyPagePresenter implements Presenter {
 						if (dragType.equals(DragType.STRUCTURE)) {
 							StructureTermView stv = (StructureTermView) getDragWidget();
 							// create a new node and drop
-							new OtoTreeNodePresenter(new OtoTreeNodeView(stv
-									.getData(), true), globalEventBus, eventBus)
-									.addChild(targetNode);
+							addNodeAndExpand(stv.getData(), targetNode);
 
 							// remove the source from structure list
 							stv.removeFromParent();
 							updatePrepopulateBtnStatus();
-							targetNode.setState(true);
 						} else {
 							TreeItem sourceNode = getDragTreeItem();
 
@@ -165,17 +162,7 @@ public class HierarchyPagePresenter implements Presenter {
 
 					@Override
 					public void onClick(AddStructureAsChildEvent event) {
-						// TODO Auto-generated method stub
-						/**
-						 * 1. pop up input dialog
-						 * 
-						 * 2. validate term (already exist in this dataset,
-						 * already exist in OTO)
-						 * 
-						 * 3. save term to DB
-						 * 
-						 * 4. append new node
-						 */
+						addStructure(event.getNode());
 					}
 				});
 
@@ -202,6 +189,103 @@ public class HierarchyPagePresenter implements Presenter {
 		});
 	}
 
+	private void addStructure(final TreeItem targetNode) {
+		final String name = Window
+				.prompt("Add a new structure as a child node. \n\n"
+						+ "Please input the structure name (using singular form): ",
+						"");
+		if (name.equals("")) {
+			return;
+		}
+
+		// check if term already exisit in this dataset
+		if ($("[term_name='" + name + "']").length() > 0) {
+			Window.alert("Structure '" + name
+					+ "' already exists in this upload. ");
+			return;
+		}
+
+		// check if it has uuid in OTO: <name, 'structure', glossaryType>
+		rpcService.isStructureExistInOTO(name,
+				MainPresenter.uploadInfo.getGlossaryTypeName(),
+				new AsyncCallback<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean result) {
+						if (result) {
+							addExistingStructureToDB(name, targetNode);
+						} else {
+							addNonExistingStructureToDB(name, targetNode);
+						}
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Failed to query OTO. Please try again later. \n\n"
+								+ caught.getMessage());
+						return;
+
+					}
+				});
+	}
+
+	/**
+	 * The term already exist in OTO, already has a UUID
+	 * 
+	 * @param termName
+	 */
+	private void addExistingStructureToDB(String termName,
+			final TreeItem targetNode) {
+		rpcService.addStructure(termName, MainPresenter.uploadID,
+				new AsyncCallback<Structure>() {
+
+					@Override
+					public void onSuccess(Structure result) {
+						addNodeAndExpand(result, targetNode);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Server Error: failed to add structure ''. Please try again later. \n\n"
+								+ caught.getMessage());
+
+					}
+				});
+	}
+
+	/**
+	 * The term doesn't exist in OTO, need to force user to give definition to
+	 * the term
+	 * 
+	 * @param termName
+	 */
+	private void addNonExistingStructureToDB(String termName,
+			final TreeItem targetNode) {
+		final String definition = Window.prompt(
+				"Please give definition to term '" + termName + "'", "");
+		if (definition.equals("")) {
+			Window.alert("You have to give definition in order to add term '"
+					+ termName + "'");
+			return;
+		}
+
+		rpcService.addStructureToOTOAndDB(termName, MainPresenter.uploadID,
+				MainPresenter.uploadInfo.getGlossaryTypeName(), definition,
+				new AsyncCallback<Structure>() {
+
+					@Override
+					public void onSuccess(Structure result) {
+						addNodeAndExpand(result, targetNode);
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Server Error: failed to add structure ''. Please try again later. \n\n"
+								+ caught.getMessage());
+					}
+				});
+	}
+
 	private void saveTree() {
 		rpcService.saveTree(MainPresenter.uploadID, getNodeDataListToSave(),
 				new AsyncCallback<Void>() {
@@ -219,6 +303,18 @@ public class HierarchyPagePresenter implements Presenter {
 								+ caught.getMessage());
 					}
 				});
+	}
+
+	/**
+	 * add a child node to target Node and expand target node to display changes
+	 * 
+	 * @param structure
+	 * @param targetNode
+	 */
+	private void addNodeAndExpand(Structure structure, TreeItem targetNode) {
+		new OtoTreeNodePresenter(new OtoTreeNodeView(structure, true),
+				globalEventBus, eventBus).addChild(targetNode);
+		targetNode.setState(true);
 	}
 
 	private void deleteNode(TreeItem node) {
@@ -379,7 +475,7 @@ public class HierarchyPagePresenter implements Presenter {
 			}
 		}
 		nodeData.setChildren(children);
-		
+
 		return nodeData;
 	}
 
@@ -434,9 +530,8 @@ public class HierarchyPagePresenter implements Presenter {
 				});
 	}
 
-	private void getRootNode() {
-		Structure rootData = new Structure("0", "0",
-				MainPresenter.uploadInfo.getGlossaryTypeName());
+	private void getRootNode(String rootName) {
+		Structure rootData = new Structure("0", "0", rootName);
 		TreeItem root = new OtoTreeNodePresenter(new OtoTreeNodeView(rootData,
 				false), globalEventBus, eventBus).addRoot(display.getTree());
 		display.setTreeRoot(root);
@@ -451,6 +546,8 @@ public class HierarchyPagePresenter implements Presenter {
 
 					@Override
 					public void onSuccess(ArrayList<StructureNodeData> result) {
+						getRootNode(MainPresenter.uploadInfo
+								.getGlossaryTypeName());
 						if (result.size() < 1) {
 							display.getPrepopulateBtn().setVisible(true);
 						}

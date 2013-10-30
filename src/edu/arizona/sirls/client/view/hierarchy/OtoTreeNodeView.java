@@ -27,7 +27,7 @@ public class OtoTreeNodeView extends Composite implements
 		layout.setSpacing(5);
 		layout.addStyleName("HIERARCHY_tree_node");
 		layout.getElement().setAttribute("term_id", data.getId());
-		layout.getElement().setAttribute("parent_id", data.getPid());
+		layout.getElement().setAttribute("term_name", data.getTermName());
 
 		termLbl = new Label(data.getTermName());
 		if (toSave) {

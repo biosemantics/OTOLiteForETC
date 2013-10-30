@@ -18,4 +18,13 @@ public interface HierarchyServiceAsync {
 	void saveTree(String uploadID, ArrayList<StructureNodeData> nodeDataList,
 			AsyncCallback<Void> callback);
 
+	void isStructureExistInOTO(String termName, String glossaryType,
+			AsyncCallback<Boolean> callback);
+
+	void addStructure(String termName, String uploadID,
+			AsyncCallback<Structure> callback);
+
+	void addStructureToOTOAndDB(String termName, String uploadID, String glossaryType,
+			String definition, AsyncCallback<Structure> callback);
+
 }

@@ -42,6 +42,41 @@ public class QueryOTO extends AbstractOTOAccessObject {
 	}
 
 	/**
+	 * insert the triple with definition into OTO dictionary
+	 * 
+	 * @param term
+	 * @param category
+	 * @param glossaryType
+	 * @param definition
+	 */
+	public void insertTripleToOTO(String term, String category,
+			String glossaryType, String definition) {
+		OTOClient otoClient = createOTOClient();
+		otoClient.insertAndGetGlossaryDictionaryEntry(glossaryType, term,
+				category, definition).getTermID();
+	}
+
+	/**
+	 * check if a given triple exisit in OTO
+	 * 
+	 * @param term
+	 * @param category
+	 * @param glossaryType
+	 * @return
+	 */
+	public boolean isTripleExistInOTO(String term, String category,
+			String glossaryType) {
+		OTOClient otoClient = createOTOClient();
+		GlossaryDictionaryEntry entry = otoClient.getGlossaryDictionaryEntry(
+				glossaryType, term, category);
+		if (entry == null) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * get the <category, definition> list for a given term in a given glossary
 	 * type
 	 * 

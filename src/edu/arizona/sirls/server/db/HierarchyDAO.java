@@ -115,6 +115,59 @@ public class HierarchyDAO extends AbstractDAO {
 	}
 
 	/**
+	 * use add structure to the upload
+	 * 
+	 * @param uploadID
+	 * @param termName
+	 * @return
+	 * @throws SQLException
+	 */
+	public Structure addStructure(String uploadID, String termName)
+			throws SQLException {
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		Structure structure = null;
+		try {
+			conn = getConnection();
+			stmt = conn.createStatement();
+			conn.setAutoCommit(false);
+
+			// delete all records of existing tree
+			String sql = "insert into structures (uploadID, term, userCreated) "
+					+ "values (" + uploadID + ", '" + termName + "', true)";
+			stmt.executeUpdate(sql);
+
+			sql = "SELECT LAST_INSERT_ID()";
+			rset = stmt.executeQuery(sql);
+			if (rset.next()) {
+				structure = new Structure(Integer.toString(rset.getInt(1)),
+						"0", termName);
+			}
+
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			if (conn != null) {
+				try {
+					conn.rollback();
+				} catch (SQLException exe) {
+					exe.printStackTrace();
+					throw exe;
+				}
+			}
+			throw e;
+		} finally {
+			close(rset);
+			close(stmt);
+			closeConnection(conn);
+		}
+
+		return structure;
+	}
+
+	/**
 	 * save the entire tree
 	 * 
 	 * @param uploadID
@@ -124,12 +177,11 @@ public class HierarchyDAO extends AbstractDAO {
 	public void saveTree(String uploadID,
 			ArrayList<StructureNodeData> nodeDataList) throws SQLException {
 		Connection conn = null;
-		Statement stmt = null, stmt_select = null;
+		Statement stmt = null;
 		ResultSet rset = null;
 		try {
 			conn = getConnection();
 			stmt = conn.createStatement();
-			stmt_select = conn.createStatement();
 			conn.setAutoCommit(false);
 
 			// delete all records of existing tree
@@ -157,7 +209,6 @@ public class HierarchyDAO extends AbstractDAO {
 		} finally {
 			close(rset);
 			close(stmt);
-			close(stmt_select);
 			closeConnection(conn);
 		}
 	}

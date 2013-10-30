@@ -6,6 +6,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.arizona.sirls.client.rpc.HierarchyService;
 import edu.arizona.sirls.server.db.HierarchyDAO;
+import edu.arizona.sirls.server.oto.QueryOTO;
 import edu.arizona.sirls.shared.beans.hierarchy.Structure;
 import edu.arizona.sirls.shared.beans.hierarchy.StructureNodeData;
 
@@ -32,6 +33,28 @@ public class HierarchyServiceImpl extends RemoteServiceServlet implements
 	public void saveTree(String uploadID,
 			ArrayList<StructureNodeData> nodeDataList) throws Exception {
 		HierarchyDAO.getInstance().saveTree(uploadID, nodeDataList);
+	}
+
+	@Override
+	public boolean isStructureExistInOTO(String termName, String glossaryType)
+			throws Exception {
+		boolean result = QueryOTO.getInstance().isTripleExistInOTO(termName,
+				"structure", glossaryType);
+		return result;
+	}
+
+	@Override
+	public Structure addStructure(String termName, String uploadID)
+			throws Exception {
+		return HierarchyDAO.getInstance().addStructure(uploadID, termName);
+	}
+
+	@Override
+	public Structure addStructureToOTOAndDB(String termName, String uploadID,
+			String glossaryType, String definition) throws Exception {
+		QueryOTO.getInstance().insertTripleToOTO(termName, "structure",
+				glossaryType, definition);
+		return HierarchyDAO.getInstance().addStructure(uploadID, termName);
 	}
 
 }

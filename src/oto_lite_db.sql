@@ -184,7 +184,7 @@ create table selected_ontology_records (
 	recordID BIGINT not null,
 	
 	primary key (ID)
-);
+) ENGINE=InnoDB;
 
 insert into selected_ontology_records
 (term, category, glossaryType, recordType, recordID)
@@ -200,7 +200,7 @@ create table structures (
 	userCreated boolean default false,
 
 	primary key (ID)
-);
+) ENGINE=InnoDB;
 
 drop table if exists trees;
 create table trees (
@@ -210,4 +210,4 @@ create table trees (
 	pID BIGINT,	
 
 	primary key (ID)
-);
+) ENGINE=InnoDB;

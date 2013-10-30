@@ -43,9 +43,10 @@ public class ContextDAO extends AbstractDAO {
 		try {
 			conn = getConnection();
 
+			// notice: mysql regex space is ' ', not \\s
 			String sql = "select source, sentence from sentences "
-					+ "where uploadID = ? and sentence rlike '^(.*\\s)?" + term
-					+ "(\\s.*)?$' limit 10";
+					+ "where uploadID = ? and sentence rlike '^(.* )?" + term
+					+ "( .*)?$' limit 10";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, uploadID);
 			rset = pstmt.executeQuery();

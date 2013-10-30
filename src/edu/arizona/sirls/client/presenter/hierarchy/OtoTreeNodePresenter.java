@@ -76,6 +76,7 @@ public class OtoTreeNodePresenter implements Presenter {
 	}
 
 	public TreeItem addRoot(Tree tree) {
+		tree.clear();
 		TreeItem root = new TreeItem(display.asWidget());
 		display.setTreeItem(root);
 		tree.addItem(root);

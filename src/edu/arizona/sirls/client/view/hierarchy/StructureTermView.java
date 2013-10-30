@@ -19,6 +19,7 @@ public class StructureTermView extends Composite implements
 		lbl = new Label(structure.getTermName());
 		lbl.addStyleName("HIERARCHY_structure_label");
 		lbl.getElement().setDraggable(Element.DRAGGABLE_TRUE);
+		lbl.getElement().setAttribute("term_name", structure.getTermName());
 		initWidget(lbl);
 	}
 
@@ -31,7 +32,7 @@ public class StructureTermView extends Composite implements
 	public Structure getData() {
 		return structure;
 	}
-	
+
 	public Widget asWidget() {
 		return this;
 	}

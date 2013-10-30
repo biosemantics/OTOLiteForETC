@@ -16,4 +16,12 @@ public interface HierarchyService extends RemoteService {
 
 	void saveTree(String uploadID, ArrayList<StructureNodeData> nodeDataList)
 			throws Exception;
+
+	boolean isStructureExistInOTO(String termName, String glossaryType)
+			throws Exception;
+
+	Structure addStructure(String termName, String uploadID) throws Exception;
+
+	Structure addStructureToOTOAndDB(String termName, String uploadID, String glossaryType, String definition)
+			throws Exception;
 }
