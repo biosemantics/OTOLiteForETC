@@ -31,10 +31,12 @@ import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEvent;
 import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEventHandler;
 import edu.arizona.sirls.client.presenter.MainPresenter;
 import edu.arizona.sirls.client.presenter.Presenter;
+import edu.arizona.sirls.client.presenter.general.ConfirmDialogCallback;
 import edu.arizona.sirls.client.rpc.HierarchyService;
 import edu.arizona.sirls.client.rpc.HierarchyServiceAsync;
 import edu.arizona.sirls.client.view.hierarchy.OtoTreeNodeView;
 import edu.arizona.sirls.client.view.hierarchy.StructureTermView;
+import edu.arizona.sirls.client.widget.Dialog;
 import edu.arizona.sirls.shared.beans.hierarchy.Structure;
 import edu.arizona.sirls.shared.beans.hierarchy.StructureNodeData;
 
@@ -52,6 +54,8 @@ public class HierarchyPagePresenter implements Presenter {
 		TreeItem getTreeRoot();
 
 		Button getSaveBtn();
+
+		Button getResetBtn();
 
 		void setTreeRoot(TreeItem root);
 
@@ -130,7 +134,7 @@ public class HierarchyPagePresenter implements Presenter {
 
 							// remove the source from structure list
 							stv.removeFromParent();
-							updatePrepopulateBtnStatus();
+							updateBtnsStatus();
 						} else {
 							TreeItem sourceNode = getDragTreeItem();
 
@@ -140,7 +144,7 @@ public class HierarchyPagePresenter implements Presenter {
 									sourceNode.remove();
 								}
 								targetNode.setState(true);
-								updatePrepopulateBtnStatus();
+								updateBtnsStatus();
 							}
 						}
 					}
@@ -187,6 +191,44 @@ public class HierarchyPagePresenter implements Presenter {
 				// prepopulate the tree and refresh the page
 			}
 		});
+
+		display.getResetBtn().addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				resetTree();
+			}
+		});
+	}
+
+	/**
+	 * clear the tree and save it to database
+	 * 
+	 * allow user to restart build the tree from scratch
+	 */
+	private void resetTree() {
+		Dialog.confirm("Confirm reset",
+				"Reset the tree will delete all the nodes on the tree and cannot be redone. \n"
+						+ "Are you sure you want to reset the tree? ",
+				new ConfirmDialogCallback() {
+
+					@Override
+					public void onCancel() {
+						// do nothing
+					}
+
+					@Override
+					public void onAffirmative() {
+						TreeItem root = display.getTreeRoot();
+
+						if (root.getChildCount() > 0) {
+							for (int i = root.getChildCount() - 1; i >= 0; i--) {
+								deleteNode(root.getChild(i));
+							}
+						}
+						saveTree();
+					}
+				});
 	}
 
 	private void addStructure(final TreeItem targetNode) {
@@ -294,7 +336,7 @@ public class HierarchyPagePresenter implements Presenter {
 					public void onSuccess(Void result) {
 						Window.alert("Tree saved successfully. ");
 						$(".to_save").removeClass("to_save");
-						// Window.Location.reload();
+						updateBtnsStatus();
 					}
 
 					@Override
@@ -418,10 +460,12 @@ public class HierarchyPagePresenter implements Presenter {
 	/**
 	 * update the status of prepopulate button
 	 */
-	private void updatePrepopulateBtnStatus() {
+	private void updateBtnsStatus() {
 		if (isTreeEmpty() && !hasDataToSave()) {
 			display.getPrepopulateBtn().setVisible(true);
+			display.getResetBtn().setVisible(false);
 		} else {
+			display.getResetBtn().setVisible(true);
 			display.getPrepopulateBtn().setVisible(false);
 		}
 	}
@@ -548,13 +592,10 @@ public class HierarchyPagePresenter implements Presenter {
 					public void onSuccess(ArrayList<StructureNodeData> result) {
 						getRootNode(MainPresenter.uploadInfo
 								.getGlossaryTypeName());
-						if (result.size() < 1) {
-							display.getPrepopulateBtn().setVisible(true);
-						}
 						for (StructureNodeData nodeData : result) {
 							constructNode(nodeData, display.getTreeRoot());
 						}
-
+						updateBtnsStatus();
 					}
 
 					@Override

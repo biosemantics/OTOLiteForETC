@@ -21,6 +21,7 @@ public class HierarchyPageView extends Composite implements
 	private TreeItem root;
 	private Button prepopulateBtn;
 	private Button saveBtn;
+	private Button resetBtn;
 
 	public HierarchyPageView() {
 		FlexTable layout = new FlexTable();
@@ -46,10 +47,16 @@ public class HierarchyPageView extends Composite implements
 		rightTitleTbl.setText(0, 0, "Hierarchy: ");
 		rightTitleTbl.getRowFormatter().addStyleName(0, "HIERARCHY_title");
 		prepopulateBtn = new Button("Prepopulate Tree");
+		prepopulateBtn
+				.setTitle("Pre-build the tree with part-of relations from Ontology. ");
+		resetBtn = new Button("Reset Tree");
+		resetBtn.setTitle("Reset the tree to be empty.");
 		saveBtn = new Button("Save Tree");
+		saveBtn.setTitle("Save the tree to database");
 		HorizontalPanel btns = new HorizontalPanel();
 		btns.setSpacing(1);
 		btns.add(prepopulateBtn);
+		btns.add(resetBtn);
 		btns.add(saveBtn);
 		rightTitleTbl.setWidget(0, 1, btns);
 		rightTitleTbl.getColumnFormatter().setWidth(0, "50%");
@@ -58,6 +65,7 @@ public class HierarchyPageView extends Composite implements
 				HasHorizontalAlignment.ALIGN_RIGHT,
 				HasVerticalAlignment.ALIGN_MIDDLE);
 		prepopulateBtn.setVisible(false); // default not visible
+		resetBtn.setVisible(false);
 
 		// left list panel
 		leftListPanel = new VerticalPanel();
@@ -123,6 +131,11 @@ public class HierarchyPageView extends Composite implements
 	@Override
 	public Button getSaveBtn() {
 		return saveBtn;
+	}
+
+	@Override
+	public Button getResetBtn() {
+		return resetBtn;
 	}
 
 }
