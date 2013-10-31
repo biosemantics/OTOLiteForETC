@@ -24,4 +24,6 @@ public interface HierarchyService extends RemoteService {
 
 	Structure addStructureToOTOAndDB(String termName, String uploadID, String glossaryType, String definition)
 			throws Exception;
+	
+	void prepopulateTree(String uploadID) throws Exception;
 }

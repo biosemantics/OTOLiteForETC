@@ -187,8 +187,7 @@ public class HierarchyPagePresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				// prepopulate the tree and refresh the page
+				prepopulateTree();
 			}
 		});
 
@@ -199,6 +198,28 @@ public class HierarchyPagePresenter implements Presenter {
 				resetTree();
 			}
 		});
+	}
+
+	private void prepopulateTree() {
+		rpcService.prepopulateTree(MainPresenter.uploadID,
+				new AsyncCallback<Void>() {
+
+					@Override
+					public void onSuccess(Void result) {
+						// refresh the entire page
+						display.getStructureListPanel().clear();
+						fetchStructures();
+						getRootNode("Loading tree ...");
+						fetchTree();
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Server Error: failed to prepopulate the tree. Please try again later. \n\n"
+								+ caught.getMessage());
+
+					}
+				});
 	}
 
 	/**

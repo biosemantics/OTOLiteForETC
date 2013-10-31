@@ -57,4 +57,34 @@ public class HierarchyServiceImpl extends RemoteServiceServlet implements
 		return HierarchyDAO.getInstance().addStructure(uploadID, termName);
 	}
 
+	@Override
+	public void prepopulateTree(String uploadID) throws Exception {
+		// TODO wait for Hong's implementation
+
+		/**
+		 * first delete the tree
+		 * 
+		 * input: a list of terms with permanentID in ontology_match table
+		 * particular ontology
+		 * 
+		 * do: for each term, trace part_of to top, check if any term exist in
+		 * the input list. if do exist, add record in table [trees]
+		 * 
+		 * 
+		 * 
+		 * when insert to trees: always insert 2 records:
+		 * 
+		 * 1. (insert or update if A's parent is 0) A is child of B
+		 * 
+		 * 2. B is child of 0
+		 * 
+		 * Then, remove B from input term list
+		 * 
+		 * keep doing this, until the input term list is empty
+		 * 
+		 * 
+		 */
+
+	}
+
 }

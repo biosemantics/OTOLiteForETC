@@ -27,4 +27,6 @@ public interface HierarchyServiceAsync {
 	void addStructureToOTOAndDB(String termName, String uploadID, String glossaryType,
 			String definition, AsyncCallback<Structure> callback);
 
+	void prepopulateTree(String uploadID, AsyncCallback<Void> callback);
+
 }
