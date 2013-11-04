@@ -46,7 +46,6 @@ public class HierarchyPageView extends Composite implements
 				HasVerticalAlignment.ALIGN_MIDDLE);
 
 		rightTitleTbl.setText(0, 0, "Hierarchy: ");
-		rightTitleTbl.getRowFormatter().addStyleName(0, "HIERARCHY_title");
 		prepopulateBtn = new Button("Prepopulate Tree");
 		prepopulateBtn
 				.setTitle("Pre-build the tree with part-of relations from Ontology. ");
@@ -72,16 +71,16 @@ public class HierarchyPageView extends Composite implements
 		ScrollPanel leftPanel = new ScrollPanel();
 		leftPanel.setSize("100%", "100%");
 		layout.getRowFormatter().addStyleName(1, "HIERARCHY_Content_row");
-		
+
 		leftListPanel = new VerticalPanel();
 		leftListPanel.setSize("100%", "100%");
 		leftListPanel.setSpacing(5);
 		layout.getCellFormatter().addStyleName(1, 0,
 				"HIERARCHY_left_structure_list");
-		
+
 		layout.setWidget(1, 0, leftPanel);
 		leftPanel.add(leftListPanel);
-		
+
 		layout.getCellFormatter().setWidth(1, 0, "20%");
 		layout.getCellFormatter().setHeight(1, 0, "100%");
 		layout.getFlexCellFormatter().setAlignment(1, 0,
@@ -91,11 +90,11 @@ public class HierarchyPageView extends Composite implements
 		// right tree panel
 		ScrollPanel rightPanel = new ScrollPanel();
 		rightPanel.setSize("100%", "100%");
-		
+
 		treePanel = new VerticalPanel();
 		rightPanel.add(treePanel);
 		layout.setWidget(1, 1, rightPanel);
-		
+
 		treePanel.setSize("100%", "100%");
 		layout.getCellFormatter().setWidth(1, 1, "80%");
 		layout.getCellFormatter().setHeight(1, 1, "100%");

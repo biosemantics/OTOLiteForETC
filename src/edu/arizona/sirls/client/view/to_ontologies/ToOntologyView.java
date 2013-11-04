@@ -1,13 +1,13 @@
 package edu.arizona.sirls.client.view.to_ontologies;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -39,48 +39,38 @@ public class ToOntologyView extends Composite implements
 	/**
 	 * things in the middle part: matches and submissions
 	 */
-	private SimplePanel middlePanel;
-	private SimplePanel rightPanel;
+	private ScrollPanel middlePanel;
+	private ScrollPanel rightPanel;
 
 	public ToOntologyView() {
-		// the giant container
-		FlexTable layout = new FlexTable();
+
+		LayoutPanel layout = new LayoutPanel();
 		layout.setSize("100%", "100%");
 		initWidget(layout);
 
+		ScrollPanel leftPart = new ScrollPanel();
+		layout.add(leftPart);
+		layout.setWidgetLeftRight(leftPart, 0, Unit.PCT, 82, Unit.PCT);
+
 		// left list part
 		VerticalPanel leftListPanel = new VerticalPanel();
-		layout.setWidget(0, 0, leftListPanel);
-		layout.getCellFormatter().setWidth(0, 0, "18%");
-		layout.getCellFormatter().setHeight(0, 0, "100%");
+		leftPart.add(leftListPanel);
+
 		leftListPanel.setWidth("100%");
 		constructLeftListPart(leftListPanel);
-		layout.getFlexCellFormatter().setAlignment(0, 0,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_TOP);
 
 		// middle part
-		middlePanel = new SimplePanel();
-		layout.setWidget(0, 1, middlePanel);
-		layout.getCellFormatter().setWidth(0, 1, "52%");
-		layout.getCellFormatter().setHeight(0, 1, "100%");
-		middlePanel.setWidth("100%");
+		middlePanel = new ScrollPanel();
+		layout.add(middlePanel);
+		layout.setWidgetLeftRight(middlePanel, 19, Unit.PCT, 30, Unit.PCT);
 		initiateMiddlePanel();
-		layout.getFlexCellFormatter().setAlignment(0, 1,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_TOP);
 
 		/**
 		 * right detail part
 		 */
-		rightPanel = new SimplePanel();
-		layout.setWidget(0, 2, rightPanel);
-		layout.getCellFormatter().setWidth(0, 2, "30%");
-		layout.getCellFormatter().setHeight(0, 2, "100%");
-		rightPanel.setWidth("100%");
-		layout.getFlexCellFormatter().setAlignment(0, 2,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_TOP);
+		rightPanel = new ScrollPanel();
+		layout.add(rightPanel);
+		layout.setWidgetLeftRight(rightPanel, 71, Unit.PCT, 0, Unit.PCT);
 	}
 
 	private void constructLeftListPart(VerticalPanel panel) {
