@@ -1,14 +1,11 @@
 package edu.arizona.sirls.client.presenter;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.arizona.sirls.client.presenter.hierarchy.HierarchyPagePresenter;
@@ -19,72 +16,67 @@ import edu.arizona.sirls.client.rpc.GeneralServiceAsync;
 import edu.arizona.sirls.client.view.hierarchy.HierarchyPageView;
 import edu.arizona.sirls.client.view.orders.OrdersPageView;
 import edu.arizona.sirls.client.view.to_ontologies.ToOntologyView;
+import edu.arizona.sirls.client.widget.OtoTabPanel;
+import edu.arizona.sirls.client.widget.presenter.OtoTabPanelTabSelectionHandler;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 
 public class MainPresenter implements Presenter {
 
 	public interface Display {
-		TabPanel getTabPanel();
-
-		SimplePanel getOrderContentContainer();
-
-		SimplePanel getHierarchyContentContainer();
-
-		SimplePanel getToOntologiesContentContainer();
-
-		void fillInTabContent(SimplePanel contentContainer, HasWidgets content);
+		OtoTabPanel getTabPanel();
 
 		Widget asWidget();
 	}
 
 	private final Display display;
+	private final HasWidgets container;
 	private HandlerManager globalEventBus;
 	public static String uploadID;
 	public static UploadInfo uploadInfo;
 	private GeneralServiceAsync rpcService = GWT.create(GeneralService.class);
 
-	public MainPresenter(Display view, HandlerManager globalEventBus)
-			throws Exception {
+	public MainPresenter(Display view, HandlerManager globalEventBus,
+			HasWidgets container) throws Exception {
 		this.display = view;
 		this.globalEventBus = globalEventBus;
+		this.container = container;
 		uploadID = Validator.validateUploadID();
 	}
 
 	public void bindEvents() {
 		display.getTabPanel().addSelectionHandler(
-				new SelectionHandler<Integer>() {
+				new OtoTabPanelTabSelectionHandler() {
 
 					@Override
-					public void onSelection(SelectionEvent<Integer> event) {
-						switch (event.getSelectedItem()) {
-						case 0:
-							new ToOntologyPresenter(new ToOntologyView(),
-									globalEventBus).go(display
-									.getToOntologiesContentContainer());
-							break;
-						case 1:
-							new HierarchyPagePresenter(new HierarchyPageView(),
-									globalEventBus).go(display
-									.getHierarchyContentContainer());
-							break;
-						case 2:
-							new OrdersPagePresenter(new OrdersPageView(),
-									globalEventBus).go(display
-									.getOrderContentContainer());
-							break;
-						default:
-							break;
-						}
+					public void onSelect(int tabIndex) {
+						fillInTabContent();
 					}
 				});
 	}
 
+	private void fillInTabContent() {
+		switch (display.getTabPanel().getCurrentTabIndex()) {
+		case 0: // to_ontology page
+			new ToOntologyPresenter(new ToOntologyView(), globalEventBus)
+					.go(display.getTabPanel().getContentPanel());
+			break;
+		case 1: // hierarchy page
+			new HierarchyPagePresenter(new HierarchyPageView(), globalEventBus)
+					.go(display.getTabPanel().getContentPanel());
+			break;
+		case 2:// orders page
+			new OrdersPagePresenter(new OrdersPageView(), globalEventBus)
+					.go(display.getTabPanel().getContentPanel());
+			break;
+		default:
+			break;
+		}
+	}
+
 	@Override
-	public void go(HasWidgets container) {
-		bindEvents();
-		container.clear();
-		container.add(display.asWidget());
+	public void go(HasWidgets dummyContainer) {
 		fetchUploadInfo();
+		container.add(new Label("Loading ..."));
 	}
 
 	private void fetchUploadInfo() {
@@ -93,7 +85,14 @@ public class MainPresenter implements Presenter {
 			@Override
 			public void onSuccess(UploadInfo result) {
 				uploadInfo = result;
-				display.getTabPanel().selectTab(1);
+				// get uploadInfo before the page is functional
+				MainPresenter.uploadInfo = result;
+
+				bindEvents();
+				// select tab has to be after bindEvents()
+				display.getTabPanel().selectTab(0);
+				container.clear();
+				container.add(display.asWidget());
 			}
 
 			@Override

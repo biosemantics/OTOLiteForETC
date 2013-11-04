@@ -1,4 +1,39 @@
 /*only use color a8d04d - light green, 279446 - green, 307137 - dark green*/
+/*our own tab header*/
+.oto-tab-header {
+	height: 25px;
+	background-color: #C0C0C0;
+	width: 100%;
+	text-align: left;
+	padding: 0px;
+}
+
+.oto-tab-card {
+	height: 18px;
+	color: white;
+	cursor: pointer;
+	background-color: #909090;
+	margin-top: 5px;
+	margin-left: 8px;
+	margin-bottom: 0px;
+	padding: 4px 10px 0px 10px; /*top, right, bottom, left*/
+	vertical-align: bottom;
+}
+
+.oto-tab-content-panel {
+	overflow: auto;
+}
+
+
+.tablayout_test {
+}
+
+.oto-current-tab {	
+	background-color: white;
+	color: black;
+	font-weight: bolder;
+}
+
 .gwt-TabPanel {
 	
 }
@@ -25,10 +60,12 @@
 	overflow: auto;
 }
 
-.main_tab_panel tr{
+.main_tab_panel tr {
+	
 }
 
 .main_tab_panel tr:first-child {
+	
 }
 
 .right_container {

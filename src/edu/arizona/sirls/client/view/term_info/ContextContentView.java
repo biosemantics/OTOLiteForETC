@@ -6,6 +6,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.arizona.sirls.client.presenter.term_info.ContextContentPresenter;
@@ -16,11 +17,14 @@ public class ContextContentView extends Composite implements
 
 	public ContextContentView(ArrayList<TermContext> contexts, String term) {
 		if (contexts.size() > 0) {
+			ScrollPanel layout = new ScrollPanel();
+			layout.setSize("100%", "100%");
+			initWidget(layout);
 
 			CellTable<TermContext> table = new CellTable<TermContext>();
 			table.setSize("100%", "100%");
-			initWidget(table);
-			
+			layout.add(table);
+
 			// first column: source
 			TextColumn<TermContext> sourceColumn = new TextColumn<TermContext>() {
 
@@ -29,7 +33,7 @@ public class ContextContentView extends Composite implements
 					return object.getSource();
 				}
 			};
-			table.addColumn(sourceColumn, "Source");
+			table.addColumn(sourceColumn, "Source of '" + term + "'");
 			table.setColumnWidth(sourceColumn, "20%");
 
 			// second column: sentence
@@ -40,7 +44,7 @@ public class ContextContentView extends Composite implements
 					return object.getSentence();
 				}
 			};
-			table.addColumn(sentenceColumn, "Sentence");
+			table.addColumn(sentenceColumn, "Sentence of '" + term + "'");
 			table.setColumnWidth(sentenceColumn, "80%");
 
 			// fill in data

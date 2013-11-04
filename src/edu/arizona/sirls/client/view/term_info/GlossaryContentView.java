@@ -28,7 +28,7 @@ public class GlossaryContentView extends Composite implements
 					return object.getId();
 				}
 			};
-			table.addColumn(idColumn, "ID");
+			table.addColumn(idColumn, "ID of '" + term + "'");
 			table.setColumnWidth(idColumn, "20%");
 
 			// second column: category
@@ -50,7 +50,7 @@ public class GlossaryContentView extends Composite implements
 					return object.getDefinition();
 				}
 			};
-			table.addColumn(definitionColumn, "Definition");
+			table.addColumn(definitionColumn, "Definition of '" + term + "'");
 			table.setColumnWidth(definitionColumn, "70%");
 
 			// fill in data

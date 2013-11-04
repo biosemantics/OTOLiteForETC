@@ -21,3 +21,7 @@
 .HIERARCHY_left_structure_list {
 	border: 1px solid #307137;
 }
+
+.HIERARCHY_Content_row {
+	height: 100%;
+}

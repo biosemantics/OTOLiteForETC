@@ -3,14 +3,12 @@ package edu.arizona.sirls.client.presenter.term_info;
 import java.util.ArrayList;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.arizona.sirls.client.event.context.ViewTermInfoEvent;
@@ -22,6 +20,8 @@ import edu.arizona.sirls.client.rpc.TermInfoServiceAsync;
 import edu.arizona.sirls.client.view.term_info.ContextContentView;
 import edu.arizona.sirls.client.view.term_info.DictionaryContentView;
 import edu.arizona.sirls.client.view.term_info.GlossaryContentView;
+import edu.arizona.sirls.client.widget.OtoTabPanel;
+import edu.arizona.sirls.client.widget.presenter.OtoTabPanelTabSelectionHandler;
 import edu.arizona.sirls.shared.beans.term_info.TermContext;
 import edu.arizona.sirls.shared.beans.term_info.TermDictionary;
 import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
@@ -29,19 +29,15 @@ import edu.arizona.sirls.shared.beans.term_info.TermGlossary;
 public class TermInfoPresenter implements Presenter {
 
 	public static interface Display {
-		TabPanel getTabPanel();
-
-		int getCurrentTabIndex();
-
-		void setCurrentTabIndex(int index);
+		OtoTabPanel getTabPanel();
 
 		void setTerm(String term);
+
+		ScrollPanel getTermInfoPanel();
 
 		String getTerm();
 
 		void clearTerm();
-
-		SimplePanel getCurrentTabContent();
 
 		Widget asWidget();
 	}
@@ -65,11 +61,10 @@ public class TermInfoPresenter implements Presenter {
 	@Override
 	public void bindEvents() {
 		display.getTabPanel().addSelectionHandler(
-				new SelectionHandler<Integer>() {
+				new OtoTabPanelTabSelectionHandler() {
 
 					@Override
-					public void onSelection(SelectionEvent<Integer> event) {
-						display.setCurrentTabIndex(event.getSelectedItem());
+					public void onSelect(int tabIndex) {
 						displayTermInfoInTab();
 					}
 				});
@@ -86,7 +81,7 @@ public class TermInfoPresenter implements Presenter {
 	}
 
 	private void displayTermInfoInTab() {
-		switch (display.getCurrentTabIndex()) {
+		switch (display.getTabPanel().getCurrentTabIndex()) {
 		case 0:
 			getContext();
 			break;
@@ -103,10 +98,16 @@ public class TermInfoPresenter implements Presenter {
 
 	private void getContext() {
 		String term = display.getTerm();
+
 		if (term == null || term.equals("")) {
 			display.clearTerm();
 			return;
 		}
+
+		// loading msg
+		Label loading = new Label("Loading context of term '" + term + "' ...");
+		display.getTermInfoPanel().setWidget(loading);
+
 		rpcService.getTermContext(term, MainPresenter.uploadID,
 				new AsyncCallback<ArrayList<TermContext>>() {
 
@@ -114,7 +115,7 @@ public class TermInfoPresenter implements Presenter {
 					public void onSuccess(ArrayList<TermContext> result) {
 						new ContextContentPresenter(new ContextContentView(
 								result, display.getTerm())).go(display
-								.getCurrentTabContent());
+								.getTermInfoPanel());
 
 					}
 
@@ -132,6 +133,12 @@ public class TermInfoPresenter implements Presenter {
 			display.clearTerm();
 			return;
 		}
+
+		// loading msg
+		Label loading = new Label("Loading ontology information for term '"
+				+ term + "' ...");
+		display.getTermInfoPanel().setWidget(loading);
+
 		rpcService.getTermGlossary(term,
 				Integer.toString(MainPresenter.uploadInfo.getGlossaryType()),
 				new AsyncCallback<ArrayList<TermGlossary>>() {
@@ -140,7 +147,7 @@ public class TermInfoPresenter implements Presenter {
 					public void onSuccess(ArrayList<TermGlossary> result) {
 						new GlossaryContentPresenter(new GlossaryContentView(
 								result, display.getTerm())).go(display
-								.getCurrentTabContent());
+								.getTermInfoPanel());
 					}
 
 					@Override
@@ -157,12 +164,18 @@ public class TermInfoPresenter implements Presenter {
 			display.clearTerm();
 			return;
 		}
+
+		// loading msg
+		Label loading = new Label("Loading dictionary information for term '"
+				+ term + "' ...");
+		display.getTermInfoPanel().setWidget(loading);
+
 		rpcService.getTermDictionary(term, new AsyncCallback<TermDictionary>() {
 
 			@Override
 			public void onSuccess(TermDictionary result) {
 				new DictionaryContentPresenter(new DictionaryContentView())
-						.go(display.getCurrentTabContent());
+						.go(display.getTermInfoPanel());
 
 			}
 

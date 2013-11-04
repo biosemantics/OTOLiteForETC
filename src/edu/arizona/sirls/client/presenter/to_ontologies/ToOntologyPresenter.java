@@ -10,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,6 +74,8 @@ public class ToOntologyPresenter implements Presenter {
 		VerticalPanel getRemovedCharacterList();
 
 		void updateTermCategoryPairsCount(ListType type, int count);
+
+		void initiateMiddlePanel();
 
 		/**
 		 * middle matches and submission part
@@ -422,11 +425,15 @@ public class ToOntologyPresenter implements Presenter {
 	}
 
 	private void fetchTermsList() {
+		Label loading = new Label("Loading terms ...");
+		display.getMiddlePanel().setWidget(loading);
+
 		rpcService.getTermCategoryLists(MainPresenter.uploadID,
 				new AsyncCallback<TermCategoryLists>() {
 
 					@Override
 					public void onSuccess(TermCategoryLists result) {
+						display.initiateMiddlePanel();
 						updateLists(result);
 					}
 

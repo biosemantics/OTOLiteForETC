@@ -1,82 +1,46 @@
 package edu.arizona.sirls.client.view.term_info;
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import edu.arizona.sirls.client.presenter.term_info.TermInfoPresenter;
+import edu.arizona.sirls.client.widget.OtoTabPanel;
 
-public class TermInfoView extends Composite implements TermInfoPresenter.Display {
-	private TabPanel tabPanel;
-	private int currentTabIndex;
-	private SimplePanel currentTabContent;
-	private SimplePanel contextContent;
-	private SimplePanel definitionContent;
-	private SimplePanel glossaryContent;
+public class TermInfoView extends Composite implements
+		TermInfoPresenter.Display {
+	private OtoTabPanel tabPanel;
+	private ScrollPanel termInfoPanel;
 	private String term;
 
 	public TermInfoView() {
-		tabPanel = new TabPanel();
-		tabPanel.setSize("100%", "100%");
-		initWidget(tabPanel);
-		tabPanel.setAnimationEnabled(true);
+		// tab names
+		ArrayList<String> tabNames = new ArrayList<String>();
+		tabNames.add("Context");
+		tabNames.add("Ontology");
+		tabNames.add("Dictionary");
 
-		// create context tab
-		contextContent = new SimplePanel();
-		contextContent.setSize("100%", "100%");
-		tabPanel.add(contextContent, "Context");
-
-		// create glossary tab
-		glossaryContent = new SimplePanel();
-		glossaryContent.setSize("100%", "100%");
-		tabPanel.add(glossaryContent, "Ontology");
-
-		// create definition tab
-		definitionContent = new SimplePanel();
-		definitionContent.setSize("100%", "100%");
-		tabPanel.add(definitionContent, "Dictionary");
-
+		tabPanel = new OtoTabPanel(tabNames);
 		tabPanel.selectTab(0);
-		currentTabIndex = 0;
-		currentTabContent = contextContent;
+		
+		termInfoPanel = new ScrollPanel();
+		termInfoPanel.setSize("100%", "100%");
+		tabPanel.getContentPanel().add(termInfoPanel);
+		setInitialMsg();
+
+		initWidget(tabPanel.asWidget());
 	}
 
 	@Override
-	public TabPanel getTabPanel() {
+	public OtoTabPanel getTabPanel() {
 		return tabPanel;
 	}
 
 	public Widget asWidget() {
 		return this;
-	}
-
-	@Override
-	public int getCurrentTabIndex() {
-		return currentTabIndex;
-	}
-
-	@Override
-	public void setCurrentTabIndex(int index) {
-		this.currentTabIndex = index;
-		switch (index) {
-		case 0:
-			this.currentTabContent = contextContent;
-			break;
-		case 1:
-			this.currentTabContent = glossaryContent;
-			break;
-		case 2:
-			this.currentTabContent = definitionContent;
-			break;
-		default:
-			break;
-		}
-	}
-
-	@Override
-	public SimplePanel getCurrentTabContent() {
-		return currentTabContent;
 	}
 
 	@Override
@@ -91,9 +55,20 @@ public class TermInfoView extends Composite implements TermInfoPresenter.Display
 
 	@Override
 	public void clearTerm() {
-		contextContent.clear();
-		glossaryContent.clear();
-		definitionContent.clear();
+		termInfoPanel.clear();
+		setInitialMsg();
+	}
+
+	private void setInitialMsg() {
+		Label initialMsg = new Label(
+				"Click on a term to display detail information.");
+		termInfoPanel.clear();
+		termInfoPanel.add(initialMsg);
+	}
+
+	@Override
+	public ScrollPanel getTermInfoPanel() {
+		return termInfoPanel;
 	}
 
 }

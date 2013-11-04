@@ -1,4 +1,4 @@
-package edu.arizona.sirls.client.view.general;
+package edu.arizona.sirls.client.widget.view;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import edu.arizona.sirls.client.presenter.general.ConfirmBoxPresenter;
+import edu.arizona.sirls.client.widget.presenter.ConfirmBoxPresenter;
 
 public class ConfirmBoxView extends DialogBox implements
 		ConfirmBoxPresenter.Display {

@@ -7,6 +7,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -49,11 +50,15 @@ public class OrdersPagePresenter implements Presenter {
 	}
 
 	private void fetchOrderCategories() {
+		Label loading = new Label("Loading orders ...");
+		display.getPanel().add(loading);
+
 		rpcService.getOrderCategories(MainPresenter.uploadID,
 				new AsyncCallback<ArrayList<OrderCategory>>() {
 
 					@Override
 					public void onSuccess(ArrayList<OrderCategory> result) {
+						display.getPanel().clear();
 						for (OrderCategory category : result) {
 							new SingleOrderSetPresenter(new SingleOrderSetView(
 									category), rpcService, globalEventBus)

@@ -65,7 +65,7 @@ public class ToOntologyView extends Composite implements
 		layout.getCellFormatter().setWidth(0, 1, "52%");
 		layout.getCellFormatter().setHeight(0, 1, "100%");
 		middlePanel.setWidth("100%");
-		initiateMiddlePart(middlePanel);
+		initiateMiddlePanel();
 		layout.getFlexCellFormatter().setAlignment(0, 1,
 				HasHorizontalAlignment.ALIGN_LEFT,
 				HasVerticalAlignment.ALIGN_TOP);
@@ -138,11 +138,6 @@ public class ToOntologyView extends Composite implements
 		removedCharacterList.setWidth("100%");
 		removedCharacterDisclosure.setContent(removedCharacterList);
 		panel.add(removedCharacterDisclosure);
-	}
-
-	private void initiateMiddlePart(SimplePanel panel) {
-		Label label = new Label("Select a term (category) pair from left. ");
-		panel.add(label);
 	}
 
 	@Override
@@ -245,6 +240,12 @@ public class ToOntologyView extends Composite implements
 	@Override
 	public SimplePanel getRightPanel() {
 		return rightPanel;
+	}
+
+	@Override
+	public void initiateMiddlePanel() {
+		Label label = new Label("Select a term (category) pair from left. ");
+		middlePanel.setWidget(label);
 	}
 
 }

@@ -35,9 +35,9 @@ import edu.arizona.sirls.client.event.hierarchy.DragTreeNodeStartEvent;
 import edu.arizona.sirls.client.event.hierarchy.DropOnToTreeNodeEvent;
 import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEvent;
 import edu.arizona.sirls.client.presenter.Presenter;
-import edu.arizona.sirls.client.widget.Dialog;
+import edu.arizona.sirls.client.widget.OtoDialog;
+import edu.arizona.sirls.client.widget.presenter.ConfirmDialogCallback;
 import edu.arizona.sirls.shared.beans.hierarchy.Structure;
-import edu.arizona.sirls.client.presenter.general.ConfirmDialogCallback;
 
 public class OtoTreeNodePresenter implements Presenter {
 	public static interface Display {
@@ -149,23 +149,24 @@ public class OtoTreeNodePresenter implements Presenter {
 			public void onClick(ClickEvent event) {
 				// confirm if delete node and children
 				if (display.getTreeItem().getChildCount() > 0) {
-					Dialog.confirm(
-							"Confirm",
-							"This node has children. Delete it will also delete all its children. \n"
-									+ "Are you sure you want to delete the entire branch? ",
-							new ConfirmDialogCallback() {
+					OtoDialog
+							.confirm(
+									"Confirm",
+									"This node has children. Delete it will also delete all its children. \n"
+											+ "Are you sure you want to delete the entire branch? ",
+									new ConfirmDialogCallback() {
 
-								@Override
-								public void onCancel() {
-									// do nothing
-								}
+										@Override
+										public void onCancel() {
+											// do nothing
+										}
 
-								@Override
-								public void onAffirmative() {
-									eventBus.fireEvent(new DeleteNodeEvent(
-											display.getTreeItem()));
-								}
-							});
+										@Override
+										public void onAffirmative() {
+											eventBus.fireEvent(new DeleteNodeEvent(
+													display.getTreeItem()));
+										}
+									});
 				} else {
 					eventBus.fireEvent(new DeleteNodeEvent(display
 							.getTreeItem()));
@@ -199,6 +200,9 @@ public class OtoTreeNodePresenter implements Presenter {
 
 					eventBus.fireEvent(new DragTreeNodeStartEvent(display
 							.getTreeItem()));
+
+					globalEventBus.fireEvent(new ViewTermInfoEvent(display
+							.getNodeData().getTermName()));
 				}
 			});
 

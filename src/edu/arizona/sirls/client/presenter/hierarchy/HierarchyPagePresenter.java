@@ -12,6 +12,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -31,12 +32,12 @@ import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEvent;
 import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEventHandler;
 import edu.arizona.sirls.client.presenter.MainPresenter;
 import edu.arizona.sirls.client.presenter.Presenter;
-import edu.arizona.sirls.client.presenter.general.ConfirmDialogCallback;
 import edu.arizona.sirls.client.rpc.HierarchyService;
 import edu.arizona.sirls.client.rpc.HierarchyServiceAsync;
 import edu.arizona.sirls.client.view.hierarchy.OtoTreeNodeView;
 import edu.arizona.sirls.client.view.hierarchy.StructureTermView;
-import edu.arizona.sirls.client.widget.Dialog;
+import edu.arizona.sirls.client.widget.OtoDialog;
+import edu.arizona.sirls.client.widget.presenter.ConfirmDialogCallback;
 import edu.arizona.sirls.shared.beans.hierarchy.Structure;
 import edu.arizona.sirls.shared.beans.hierarchy.StructureNodeData;
 
@@ -228,7 +229,7 @@ public class HierarchyPagePresenter implements Presenter {
 	 * allow user to restart build the tree from scratch
 	 */
 	private void resetTree() {
-		Dialog.confirm("Confirm reset",
+		OtoDialog.confirm("Confirm reset",
 				"Reset the tree will delete all the nodes on the tree and cannot be redone. \n"
 						+ "Are you sure you want to reset the tree? ",
 				new ConfirmDialogCallback() {
@@ -575,11 +576,14 @@ public class HierarchyPagePresenter implements Presenter {
 	 * populate the structures list
 	 */
 	private void fetchStructures() {
+		Label loading = new Label("Loading structures ...");
+		display.getStructureListPanel().add(loading);
 		rpcService.getStructureList(MainPresenter.uploadID,
 				new AsyncCallback<ArrayList<Structure>>() {
 
 					@Override
 					public void onSuccess(ArrayList<Structure> result) {
+						display.getStructureListPanel().clear();
 						for (Structure structure : result) {
 							new StructureTermPresenter(new StructureTermView(
 									structure), globalEventBus, eventBus)

@@ -63,7 +63,10 @@ public class StructureTermPresenter implements Presenter {
 			public void onDragStart(DragStartEvent event) {
 				// required for firefox
 				event.setData("dummyData", "dummyData");
-				eventBus.fireEvent(new DragStructureStartEvent(display.asWidget()));
+				eventBus.fireEvent(new DragStructureStartEvent(display
+						.asWidget()));
+				globalEventBus.fireEvent(new ViewTermInfoEvent(display
+						.getData().getTermName()));
 			}
 		});
 

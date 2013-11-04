@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -68,12 +69,19 @@ public class HierarchyPageView extends Composite implements
 		resetBtn.setVisible(false);
 
 		// left list panel
+		ScrollPanel leftPanel = new ScrollPanel();
+		leftPanel.setSize("100%", "100%");
+		layout.getRowFormatter().addStyleName(1, "HIERARCHY_Content_row");
+		
 		leftListPanel = new VerticalPanel();
 		leftListPanel.setSize("100%", "100%");
 		leftListPanel.setSpacing(5);
 		layout.getCellFormatter().addStyleName(1, 0,
 				"HIERARCHY_left_structure_list");
-		layout.setWidget(1, 0, leftListPanel);
+		
+		layout.setWidget(1, 0, leftPanel);
+		leftPanel.add(leftListPanel);
+		
 		layout.getCellFormatter().setWidth(1, 0, "20%");
 		layout.getCellFormatter().setHeight(1, 0, "100%");
 		layout.getFlexCellFormatter().setAlignment(1, 0,
@@ -81,12 +89,16 @@ public class HierarchyPageView extends Composite implements
 				HasVerticalAlignment.ALIGN_TOP);
 
 		// right tree panel
+		ScrollPanel rightPanel = new ScrollPanel();
+		rightPanel.setSize("100%", "100%");
+		
 		treePanel = new VerticalPanel();
-		layout.setWidget(1, 1, treePanel);
+		rightPanel.add(treePanel);
+		layout.setWidget(1, 1, rightPanel);
+		
 		treePanel.setSize("100%", "100%");
 		layout.getCellFormatter().setWidth(1, 1, "80%");
 		layout.getCellFormatter().setHeight(1, 1, "100%");
-
 		layout.getFlexCellFormatter().setAlignment(1, 1,
 				HasHorizontalAlignment.ALIGN_LEFT,
 				HasVerticalAlignment.ALIGN_TOP);

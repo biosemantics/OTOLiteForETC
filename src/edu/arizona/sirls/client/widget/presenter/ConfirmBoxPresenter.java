@@ -1,4 +1,4 @@
-package edu.arizona.sirls.client.presenter.general;
+package edu.arizona.sirls.client.widget.presenter;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;

@@ -20,8 +20,8 @@ public class OTOLite_part2 implements EntryPoint {
 			HandlerManager globalEventBus = new HandlerManager(null);
 
 			// build page
-			new MainPresenter(new MainView(), globalEventBus).go(RootPanel
-					.get("MAIN_CONTENT"));
+			new MainPresenter(new MainView(), globalEventBus, RootPanel
+					.get("MAIN_CONTENT")).go(null);
 			new TermInfoPresenter(new TermInfoView(), globalEventBus)
 					.go(RootPanel.get("TERM_INFO"));
 		} catch (Exception e) {
