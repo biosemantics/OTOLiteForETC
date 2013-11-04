@@ -1,12 +1,14 @@
 .HIERARCHY_title {
 	background-color: #307137;
 	color: white;
-	height: 25px;
 	width: 100%;
-	font-size: 18px;
+	font-size: 12px;
 	font-weight: bold;
-	vertical-align: middle;
-	padding-top: 2px;
+	vertical-align: middle;	
+}
+
+.HIERARCHY_title_structure {
+	padding-top: 10px;
 }
 
 .HIERARCHY_structure_label {
@@ -20,8 +22,4 @@
 
 .HIERARCHY_left_structure_list {
 	border: 1px solid #307137;
-}
-
-.HIERARCHY_Content_row {
-	height: 100%;
 }

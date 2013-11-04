@@ -1,11 +1,14 @@
 package edu.arizona.sirls.client.view.hierarchy;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -25,26 +28,23 @@ public class HierarchyPageView extends Composite implements
 	private Button resetBtn;
 
 	public HierarchyPageView() {
-		FlexTable layout = new FlexTable();
-		layout.setSize("100%", "100%");
+		LayoutPanel layout = new LayoutPanel();
 		initWidget(layout);
+		layout.setSize("100%", "100%");
+
+		// FlexTable layout = new FlexTable();
+		// layout.setSize("100%", "100%");
+		// initWidget(layout);
 
 		// titles
-		layout.setText(0, 0, "Structures: ");
-		layout.getCellFormatter().setWidth(0, 0, "20%");
-		layout.getRowFormatter().addStyleName(0, "HIERARCHY_title");
-		layout.getFlexCellFormatter().setAlignment(0, 0,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_MIDDLE);
+		Label title1 = new Label("Structures: ");
+		layout.add(title1);
+		layout.setWidgetLeftRight(title1, 0, Unit.PCT, 80, Unit.PCT);
+		layout.setWidgetTopHeight(title1, 0, Unit.PCT, 37, Unit.PX);
+		layout.setStyleName(title1.getElement(), "HIERARCHY_title", true);
+		layout.setStyleName(title1.getElement(), "HIERARCHY_title_structure", true);
 
 		FlexTable rightTitleTbl = new FlexTable();
-		rightTitleTbl.setWidth("100%");
-		layout.setWidget(0, 1, rightTitleTbl);
-		layout.getCellFormatter().setWidth(0, 1, "80%");
-		layout.getFlexCellFormatter().setAlignment(0, 0,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_MIDDLE);
-
 		rightTitleTbl.setText(0, 0, "Hierarchy: ");
 		prepopulateBtn = new Button("Prepopulate Tree");
 		prepopulateBtn
@@ -67,40 +67,31 @@ public class HierarchyPageView extends Composite implements
 		prepopulateBtn.setVisible(false); // default not visible
 		resetBtn.setVisible(false);
 
+		layout.add(rightTitleTbl);
+		layout.setWidgetLeftRight(rightTitleTbl, 20.2, Unit.PCT, 0, Unit.PCT);
+		layout.setWidgetTopHeight(rightTitleTbl, 0, Unit.PX, 37, Unit.PX);
+		layout.setStyleName(rightTitleTbl.getElement(), "HIERARCHY_title");
+
 		// left list panel
 		ScrollPanel leftPanel = new ScrollPanel();
-		leftPanel.setSize("100%", "100%");
-		layout.getRowFormatter().addStyleName(1, "HIERARCHY_Content_row");
+		leftPanel.addStyleName("HIERARCHY_left_structure_list");
+		layout.add(leftPanel);
+		layout.setWidgetTopBottom(leftPanel, 38, Unit.PX, 0, Unit.PX);
+		layout.setWidgetLeftWidth(leftPanel, 0, Unit.PCT, 20, Unit.PCT);
 
 		leftListPanel = new VerticalPanel();
 		leftListPanel.setSize("100%", "100%");
 		leftListPanel.setSpacing(5);
-		layout.getCellFormatter().addStyleName(1, 0,
-				"HIERARCHY_left_structure_list");
-
-		layout.setWidget(1, 0, leftPanel);
 		leftPanel.add(leftListPanel);
-
-		layout.getCellFormatter().setWidth(1, 0, "20%");
-		layout.getCellFormatter().setHeight(1, 0, "100%");
-		layout.getFlexCellFormatter().setAlignment(1, 0,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_TOP);
 
 		// right tree panel
 		ScrollPanel rightPanel = new ScrollPanel();
-		rightPanel.setSize("100%", "100%");
+		layout.add(rightPanel);
+		layout.setWidgetTopBottom(rightPanel, 38, Unit.PX, 0, Unit.PX);
+		layout.setWidgetLeftRight(rightPanel, 20.2, Unit.PCT, 0, Unit.PCT);
 
 		treePanel = new VerticalPanel();
 		rightPanel.add(treePanel);
-		layout.setWidget(1, 1, rightPanel);
-
-		treePanel.setSize("100%", "100%");
-		layout.getCellFormatter().setWidth(1, 1, "80%");
-		layout.getCellFormatter().setHeight(1, 1, "100%");
-		layout.getFlexCellFormatter().setAlignment(1, 1,
-				HasHorizontalAlignment.ALIGN_LEFT,
-				HasVerticalAlignment.ALIGN_TOP);
 
 		tree = new Tree();
 		treePanel.add(tree);
