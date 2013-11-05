@@ -8,6 +8,6 @@ import edu.arizona.sirls.shared.beans.UploadInfo;
 @RemoteServiceRelativePath("general")
 public interface GeneralServiceAsync {
 
-	void getUploadInfo(String uploadID, AsyncCallback<UploadInfo> callback);
+	void getUploadInfo(String uploadID, String secret, AsyncCallback<UploadInfo> callback);
 
 }

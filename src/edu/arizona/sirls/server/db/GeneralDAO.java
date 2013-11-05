@@ -28,6 +28,46 @@ public class GeneralDAO extends AbstractDAO {
 		super();
 	}
 
+	public UploadInfo getUploadInfo(int uploadID, String secret)
+			throws Exception {
+		UploadInfo info = null;
+		PreparedStatement pstmt = null;
+		Connection conn = null;
+		ResultSet rset = null;
+		try {
+			conn = getConnection();
+
+			String sql = "select * from uploads where uploadID = ? and secret = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, uploadID);
+			pstmt.setString(2, secret);
+			rset = pstmt.executeQuery();
+			if (rset.next()) {
+				info = new UploadInfo(uploadID);
+				info.setBioportalApiKey(rset.getString("bioportalApiKey"));
+				info.setBioportalUserID(rset.getString("bioportalUserID"));
+				info.setEtcUserName(rset.getString("EtcUser"));
+				info.setFinalized(rset.getBoolean("isFinalized"));
+				info.setGlossaryType(rset.getInt("glossaryType"));
+				info.setGlossaryTypeName(Utilities.getGlossaryNameByID(rset
+						.getInt("glossaryType")));
+				info.setHasSentToOTO(rset.getBoolean("sentToOTO"));
+				info.setPrefixForOTO(rset.getString("prefixForOTO"));
+				info.setReadyToDelete(rset.getBoolean("readyToDelete"));
+				info.setUploadTime(rset.getDate("uploadTime"));
+				info.setSource(rset.getString("source"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			closeConnection(conn);
+			close(pstmt);
+			close(rset);
+		}
+		return info;
+	}
+
 	public UploadInfo getUploadInfo(int uploadID) throws Exception {
 		UploadInfo info = null;
 		PreparedStatement pstmt = null;

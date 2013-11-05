@@ -6,6 +6,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import edu.arizona.sirls.shared.beans.UploadInfo;
 
 @RemoteServiceRelativePath("general")
-public interface GeneralService extends RemoteService{
-	UploadInfo getUploadInfo(String uploadID) throws Exception;
+public interface GeneralService extends RemoteService {
+	UploadInfo getUploadInfo(String uploadID, String secret) throws Exception;
 }

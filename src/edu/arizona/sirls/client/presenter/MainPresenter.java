@@ -31,6 +31,7 @@ public class MainPresenter implements Presenter {
 	private final Display display;
 	private final HasWidgets container;
 	private HandlerManager globalEventBus;
+	private String secret;
 	public static String uploadID;
 	public static UploadInfo uploadInfo;
 	private GeneralServiceAsync rpcService = GWT.create(GeneralService.class);
@@ -41,6 +42,7 @@ public class MainPresenter implements Presenter {
 		this.globalEventBus = globalEventBus;
 		this.container = container;
 		uploadID = Validator.validateUploadID();
+		secret = Validator.validateSecret();
 	}
 
 	public void bindEvents() {
@@ -80,27 +82,28 @@ public class MainPresenter implements Presenter {
 	}
 
 	private void fetchUploadInfo() {
-		rpcService.getUploadInfo(uploadID, new AsyncCallback<UploadInfo>() {
+		rpcService.getUploadInfo(uploadID, secret,
+				new AsyncCallback<UploadInfo>() {
 
-			@Override
-			public void onSuccess(UploadInfo result) {
-				uploadInfo = result;
-				// get uploadInfo before the page is functional
-				MainPresenter.uploadInfo = result;
+					@Override
+					public void onSuccess(UploadInfo result) {
+						uploadInfo = result;
+						// get uploadInfo before the page is functional
+						MainPresenter.uploadInfo = result;
 
-				bindEvents();
-				// select tab has to be after bindEvents()
-				display.getTabPanel().selectTab(0);
-				container.clear();
-				container.add(display.asWidget());
-			}
+						bindEvents();
+						// select tab has to be after bindEvents()
+						display.getTabPanel().selectTab(0);
+						container.clear();
+						container.add(display.asWidget());
+					}
 
-			@Override
-			public void onFailure(Throwable caught) {
-				Window.alert("Server Error: failed in getting upload info. \n\n"
-						+ caught.getMessage());
-			}
-		});
+					@Override
+					public void onFailure(Throwable caught) {
+						Window.alert("Server Error: failed in getting upload info. \n\n"
+								+ caught.getMessage());
+					}
+				});
 	}
 
 	public UploadInfo getUploadInfo() {
