@@ -889,8 +889,7 @@ public class ToOntologiesDAO extends AbstractDAO {
 										+ "values (?, ?, ?, ?, ?)";
 								pstmt_insert = conn.prepareStatement(sql);
 								pstmt_insert.setString(1, term);
-								pstmt_insert.setString(2,
-										ontologyName.toUpperCase());
+								pstmt_insert.setString(2, "PATO");
 								pstmt_insert.setString(3, fc.getClassIRI());
 								pstmt_insert.setString(4, fc.getPLabel());
 								pstmt_insert.setString(5, fc.getDef());
