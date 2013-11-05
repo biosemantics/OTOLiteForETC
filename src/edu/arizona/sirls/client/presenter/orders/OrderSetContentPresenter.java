@@ -25,6 +25,8 @@ import edu.arizona.sirls.client.event.orders.DragTermStartEvent;
 import edu.arizona.sirls.client.event.orders.DragTermStartEventHandler;
 import edu.arizona.sirls.client.event.orders.DropTermToBoxEvent;
 import edu.arizona.sirls.client.event.orders.DropTermToBoxEventHandler;
+import edu.arizona.sirls.client.event.processing.ProcessingEndEvent;
+import edu.arizona.sirls.client.event.processing.ProcessingStartEvent;
 import edu.arizona.sirls.client.presenter.Presenter;
 import edu.arizona.sirls.client.rpc.OrderServiceAsync;
 import edu.arizona.sirls.client.view.orders.DraggableTermView;
@@ -284,11 +286,14 @@ public class OrderSetContentPresenter implements Presenter {
 	}
 
 	private void saveData() {
+		globalEvenBus.fireEvent(new ProcessingStartEvent(
+				"Saving data to server ..."));
 		rpcService.saveOrderSet(display.getDataToSave(),
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						globalEvenBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Changes in this order category has been saved successfully. ");
 						// clear all to_save in this set
 						GQuery.$(display.getLayoutTbl().getElement())
@@ -298,6 +303,7 @@ public class OrderSetContentPresenter implements Presenter {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEvenBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to save data to server. \n\n"
 								+ caught.getMessage());
 					}

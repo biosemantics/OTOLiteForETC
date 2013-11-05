@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.event.processing.ProcessingEndEvent;
+import edu.arizona.sirls.client.event.processing.ProcessingStartEvent;
 import edu.arizona.sirls.client.event.to_ontologies.AddNewSubmissionEvent;
 import edu.arizona.sirls.client.event.to_ontologies.AddNewSubmissionEventHandler;
 import edu.arizona.sirls.client.event.to_ontologies.BackToDetailViewEvent;
@@ -232,11 +234,14 @@ public class ToOntologyPresenter implements Presenter {
 	}
 
 	private void deleteSubmission(OntologySubmission submission) {
+		globalEventBus.fireEvent(new ProcessingStartEvent(
+				"Deleting submission ..."));
 		rpcService.deleteSubmission(submission, MainPresenter.uploadID,
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Submission Deleted. ");
 						display.getRightPanel().clear();
 						updateMatchesAndSubmissions(selectedTerm,
@@ -245,6 +250,7 @@ public class ToOntologyPresenter implements Presenter {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed in deleting a submission. \n\n"
 								+ caught.getMessage());
 					}
@@ -260,17 +266,27 @@ public class ToOntologyPresenter implements Presenter {
 	 */
 	private void submitSubmission(OntologySubmission submission,
 			OperationType type) {
+		if (type.equals(OperationType.NEW_SUBMISSION)) {
+			globalEventBus.fireEvent(new ProcessingStartEvent(
+					"sending ontology submission to bioportal ..."));
+		} else {
+			globalEventBus.fireEvent(new ProcessingStartEvent(
+					"updating ontology submission ..."));
+		}
+
 		rpcService.submitSubmission(submission, MainPresenter.uploadID, type,
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						updateMatchesAndSubmissions(selectedTerm,
 								selectedCategory);
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to submit submission to bioportal. \n\n"
 								+ caught.getMessage());
 					}
@@ -278,11 +294,14 @@ public class ToOntologyPresenter implements Presenter {
 	}
 
 	private void refreshMatchSubmissionsStatus() {
+		globalEventBus.fireEvent(new ProcessingStartEvent(
+				"Updating ontology matches and ontology submissions ..."));
 		rpcService.refreshOntologyStatus(MainPresenter.uploadID,
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						// update the match and submission part
 						Window.alert("Updated ontology matches and submissions successfully. ");
 						updateMatchesAndSubmissions(selectedTerm,
@@ -291,6 +310,7 @@ public class ToOntologyPresenter implements Presenter {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to Update ontology matches and ontology submissions of terms in this upload. \n\n"
 								+ caught.getMessage());
 					}

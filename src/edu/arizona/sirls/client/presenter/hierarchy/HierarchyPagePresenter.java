@@ -30,6 +30,8 @@ import edu.arizona.sirls.client.event.hierarchy.DropOnToTreeNodeEvent;
 import edu.arizona.sirls.client.event.hierarchy.DropOnToTreeNodeEventHandler;
 import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEvent;
 import edu.arizona.sirls.client.event.hierarchy.SetCopyDragEventHandler;
+import edu.arizona.sirls.client.event.processing.ProcessingEndEvent;
+import edu.arizona.sirls.client.event.processing.ProcessingStartEvent;
 import edu.arizona.sirls.client.presenter.MainPresenter;
 import edu.arizona.sirls.client.presenter.Presenter;
 import edu.arizona.sirls.client.rpc.HierarchyService;
@@ -201,12 +203,15 @@ public class HierarchyPagePresenter implements Presenter {
 	}
 
 	private void prepopulateTree() {
+		globalEventBus.fireEvent(new ProcessingStartEvent(
+				"Quering ontology to prepopulate tree ..."));
 		rpcService.prepopulateTree(MainPresenter.uploadID,
 				Integer.toString(MainPresenter.uploadInfo.getGlossaryType()),
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Tree prepopulated successfully!");
 						// refresh the entire page
 						display.getStructureListPanel().clear();
@@ -216,6 +221,7 @@ public class HierarchyPagePresenter implements Presenter {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to prepopulate the tree. Please try again later. \n\n"
 								+ caught.getMessage());
 
@@ -300,16 +306,22 @@ public class HierarchyPagePresenter implements Presenter {
 	 */
 	private void addExistingStructureToDB(String termName,
 			final TreeItem targetNode) {
+		globalEventBus
+				.fireEvent(new ProcessingStartEvent(
+						"Saving the newly added term '" + termName
+								+ "' to server ..."));
 		rpcService.addStructure(termName, MainPresenter.uploadID,
 				new AsyncCallback<Structure>() {
 
 					@Override
 					public void onSuccess(Structure result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						addNodeAndExpand(result, targetNode);
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to add structure ''. Please try again later. \n\n"
 								+ caught.getMessage());
 
@@ -333,17 +345,23 @@ public class HierarchyPagePresenter implements Presenter {
 			return;
 		}
 
+		globalEventBus
+				.fireEvent(new ProcessingStartEvent(
+						"Saving the newly added term '" + termName
+								+ "' to server ..."));
 		rpcService.addStructureToOTOAndDB(termName, MainPresenter.uploadID,
 				MainPresenter.uploadInfo.getGlossaryTypeName(), definition,
 				new AsyncCallback<Structure>() {
 
 					@Override
 					public void onSuccess(Structure result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						addNodeAndExpand(result, targetNode);
 					}
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to add structure ''. Please try again later. \n\n"
 								+ caught.getMessage());
 					}
@@ -351,11 +369,13 @@ public class HierarchyPagePresenter implements Presenter {
 	}
 
 	private void saveTree() {
+		globalEventBus.fireEvent(new ProcessingStartEvent("Saving tree ..."));
 		rpcService.saveTree(MainPresenter.uploadID, getNodeDataListToSave(),
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Tree saved successfully. ");
 						$(".to_save").removeClass("to_save");
 						updateBtnsStatus();
@@ -363,6 +383,7 @@ public class HierarchyPagePresenter implements Presenter {
 
 					@Override
 					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
 						Window.alert("Server Error: failed to save the tree. Please try again later. \n\n"
 								+ caught.getMessage());
 					}
