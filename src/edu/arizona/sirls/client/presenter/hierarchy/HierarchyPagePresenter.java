@@ -86,7 +86,6 @@ public class HierarchyPagePresenter implements Presenter {
 		container.add(display.asWidget());
 		bindEvents();
 		fetchStructures();
-		getRootNode("Loading tree ...");
 		fetchTree();
 	}
 
@@ -203,14 +202,15 @@ public class HierarchyPagePresenter implements Presenter {
 
 	private void prepopulateTree() {
 		rpcService.prepopulateTree(MainPresenter.uploadID,
+				Integer.toString(MainPresenter.uploadInfo.getGlossaryType()),
 				new AsyncCallback<Void>() {
 
 					@Override
 					public void onSuccess(Void result) {
+						Window.alert("Tree prepopulated successfully!");
 						// refresh the entire page
 						display.getStructureListPanel().clear();
 						fetchStructures();
-						getRootNode("Loading tree ...");
 						fetchTree();
 					}
 
@@ -610,6 +610,7 @@ public class HierarchyPagePresenter implements Presenter {
 	 * populate the saved tree
 	 */
 	private void fetchTree() {
+		getRootNode("Loading tree ...");
 		rpcService.getNodeList(MainPresenter.uploadID,
 				new AsyncCallback<ArrayList<StructureNodeData>>() {
 
