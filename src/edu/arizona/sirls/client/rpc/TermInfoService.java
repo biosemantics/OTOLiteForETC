@@ -18,4 +18,6 @@ public interface TermInfoService extends RemoteService {
 			throws Exception;
 
 	TermDictionary getTermDictionary(String term) throws Exception;
+	
+	String getFileContent(String uploadID, String sourceName) throws Exception;
 }

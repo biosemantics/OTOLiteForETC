@@ -7,6 +7,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import edu.arizona.sirls.client.rpc.TermInfoService;
 import edu.arizona.sirls.server.db.ContextDAO;
 import edu.arizona.sirls.server.db.ToOntologiesDAO;
+import edu.arizona.sirls.server.fileio.FileIO;
 import edu.arizona.sirls.server.oto.QueryOTO;
 import edu.arizona.sirls.server.utilities.Utilities;
 import edu.arizona.sirls.shared.beans.term_info.TermContext;
@@ -42,6 +43,12 @@ public class TermInfoServiceIml extends RemoteServiceServlet implements
 	public TermDictionary getTermDictionary(String term) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getFileContent(String uploadID, String sourceName)
+			throws Exception {
+		return FileIO.getInstance().getContextFileContent(uploadID, sourceName);
 	}
 
 }

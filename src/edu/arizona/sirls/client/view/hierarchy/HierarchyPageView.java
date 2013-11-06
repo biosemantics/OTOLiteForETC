@@ -41,8 +41,9 @@ public class HierarchyPageView extends Composite implements
 		layout.add(title1);
 		layout.setWidgetLeftRight(title1, 0, Unit.PCT, 80, Unit.PCT);
 		layout.setWidgetTopHeight(title1, 0, Unit.PCT, 37, Unit.PX);
-		layout.setStyleName(title1.getElement(), "HIERARCHY_title", true);
-		layout.setStyleName(title1.getElement(), "HIERARCHY_title_structure", true);
+		LayoutPanel.setStyleName(title1.getElement(), "HIERARCHY_title", true);
+		LayoutPanel.setStyleName(title1.getElement(),
+				"HIERARCHY_title_structure", true);
 
 		FlexTable rightTitleTbl = new FlexTable();
 		rightTitleTbl.setText(0, 0, "Hierarchy: ");
@@ -70,7 +71,7 @@ public class HierarchyPageView extends Composite implements
 		layout.add(rightTitleTbl);
 		layout.setWidgetLeftRight(rightTitleTbl, 20.2, Unit.PCT, 0, Unit.PCT);
 		layout.setWidgetTopHeight(rightTitleTbl, 0, Unit.PX, 37, Unit.PX);
-		layout.setStyleName(rightTitleTbl.getElement(), "HIERARCHY_title");
+		LayoutPanel.setStyleName(rightTitleTbl.getElement(), "HIERARCHY_title");
 
 		// left list panel
 		ScrollPanel leftPanel = new ScrollPanel();

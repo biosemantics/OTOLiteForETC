@@ -18,4 +18,7 @@ public interface TermInfoServiceAsync {
 
 	void getTermDictionary(String term, AsyncCallback<TermDictionary> callback);
 
+	void getFileContent(String uploadID, String sourceName,
+			AsyncCallback<String> callback);
+
 }

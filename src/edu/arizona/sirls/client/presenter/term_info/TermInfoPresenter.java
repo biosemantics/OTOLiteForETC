@@ -8,11 +8,17 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.event.context.ViewContxtFileEvent;
+import edu.arizona.sirls.client.event.context.ViewContextFileEventHandler;
 import edu.arizona.sirls.client.event.context.ViewTermInfoEvent;
 import edu.arizona.sirls.client.event.context.ViewTermInfoEventHandler;
+import edu.arizona.sirls.client.event.processing.ProcessingEndEvent;
+import edu.arizona.sirls.client.event.processing.ProcessingStartEvent;
 import edu.arizona.sirls.client.presenter.MainPresenter;
 import edu.arizona.sirls.client.presenter.Presenter;
 import edu.arizona.sirls.client.rpc.TermInfoService;
@@ -78,6 +84,46 @@ public class TermInfoPresenter implements Presenter {
 						displayTermInfoInTab();
 					}
 				});
+
+		// view file
+		globalEventBus.addHandler(ViewContxtFileEvent.TYPE,
+				new ViewContextFileEventHandler() {
+
+					@Override
+					public void onClick(ViewContxtFileEvent event) {
+						viewContextFile(event.getSourceName());
+					}
+				});
+	}
+
+	private void viewContextFile(String sourceName) {
+		globalEventBus.fireEvent(new ProcessingStartEvent(
+				"Fetching context file ..."));
+		rpcService.getFileContent(MainPresenter.uploadID, sourceName,
+				new AsyncCallback<String>() {
+
+					@Override
+					public void onSuccess(String result) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
+
+						// show the popup window
+						PopupPanel fileWindow = new PopupPanel(true, true);
+						fileWindow.setSize("300px", "300px");
+						TextArea content = new TextArea();
+						content.setSize("250px", "250px");
+						content.setText(result);
+						fileWindow.setWidget(content);
+						fileWindow.center();
+						fileWindow.show();
+					}
+
+					@Override
+					public void onFailure(Throwable caught) {
+						globalEventBus.fireEvent(new ProcessingEndEvent());
+						Window.alert("Server Error: failed to fetch context file. Please try again later. \n\n"
+								+ caught.getMessage());
+					}
+				});
 	}
 
 	private void displayTermInfoInTab() {
@@ -114,8 +160,8 @@ public class TermInfoPresenter implements Presenter {
 					@Override
 					public void onSuccess(ArrayList<TermContext> result) {
 						new ContextContentPresenter(new ContextContentView(
-								result, display.getTerm())).go(display
-								.getTermInfoPanel());
+								result, display.getTerm(), globalEventBus))
+								.go(display.getTermInfoPanel());
 
 					}
 

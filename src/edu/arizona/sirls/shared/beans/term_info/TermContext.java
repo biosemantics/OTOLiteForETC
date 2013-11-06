@@ -8,8 +8,6 @@ public class TermContext implements Serializable {
 	 */
 	private static final long serialVersionUID = 2446934367710935529L;
 	private String source;
-	private String srcFilePath;
-	private boolean srcFileAccessable;
 	private String sentence;
 
 	public TermContext() {
@@ -35,21 +33,5 @@ public class TermContext implements Serializable {
 
 	public void setSentence(String sentence) {
 		this.sentence = sentence;
-	}
-
-	public String getSrcFilePath() {
-		return srcFilePath;
-	}
-
-	public void setSrcFilePath(String srcFilePath) {
-		this.srcFilePath = srcFilePath;
-	}
-
-	public boolean isSrcFileAccessable() {
-		return srcFileAccessable;
-	}
-
-	public void setSrcFileAccessable(boolean srcFileAccessable) {
-		this.srcFileAccessable = srcFileAccessable;
 	}
 }

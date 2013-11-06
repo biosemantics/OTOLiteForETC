@@ -2,20 +2,27 @@ package edu.arizona.sirls.client.view.term_info;
 
 import java.util.ArrayList;
 
+import com.google.gwt.cell.client.ClickableTextCell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import edu.arizona.sirls.client.event.context.ViewContxtFileEvent;
 import edu.arizona.sirls.client.presenter.term_info.ContextContentPresenter;
 import edu.arizona.sirls.shared.beans.term_info.TermContext;
 
 public class ContextContentView extends Composite implements
 		ContextContentPresenter.Display {
 
-	public ContextContentView(ArrayList<TermContext> contexts, String term) {
+	public ContextContentView(ArrayList<TermContext> contexts, String term,
+			final HandlerManager globalEventBus) {
+
 		if (contexts.size() > 0) {
 			ScrollPanel layout = new ScrollPanel();
 			layout.setSize("100%", "100%");
@@ -26,13 +33,28 @@ public class ContextContentView extends Composite implements
 			layout.add(table);
 
 			// first column: source
-			TextColumn<TermContext> sourceColumn = new TextColumn<TermContext>() {
+			Column<TermContext, String> sourceColumn = new Column<TermContext, String>(
+					new ClickableTextCell()) {
 
 				@Override
 				public String getValue(TermContext object) {
 					return object.getSource();
 				}
 			};
+			
+			sourceColumn.setCellStyleNames("Clickable-context-filename");
+
+			sourceColumn
+					.setFieldUpdater(new FieldUpdater<TermContext, String>() {
+
+						@Override
+						public void update(int index, TermContext object,
+								String value) {
+							globalEventBus.fireEvent(new ViewContxtFileEvent(object
+									.getSource()));
+						}
+					});
+
 			table.addColumn(sourceColumn, "Source of '" + term + "'");
 			table.setColumnWidth(sourceColumn, "20%");
 

@@ -24,11 +24,11 @@
 	overflow: auto;
 }
 
-
 .tablayout_test {
+	
 }
 
-.oto-current-tab {	
+.oto-current-tab {
 	background-color: white;
 	color: black;
 	font-weight: bolder;
@@ -154,4 +154,9 @@
 
 .to_save {
 	color: red;
+}
+
+.Clickable-context-filename {
+	text-decoration: underline;
+	cursor: pointer;
 }
